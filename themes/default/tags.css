@@ -1,0 +1,24 @@
+.tag_arobase {
+	border: 1px solid gray;
+	padding-left: 4px;
+	padding-right: 4px;
+	background-color: #AAFFDD;
+	border-radius: 2px;
+}
+
+.tag_hash {
+	border: 1px solid gray;
+	padding-left: 4px;
+	padding-right: 4px;
+	background-color: #FFAADD;
+	border-radius: 2px;
+}
+
+
+.tag_taf {
+	border: 1px solid gray;
+	padding-left: 4px;
+	padding-right: 4px;
+	background-color: #FF8888;
+	border-radius: 2px;
+}
