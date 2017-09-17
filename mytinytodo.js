@@ -857,7 +857,19 @@ function prepareTagsStr(item)
 	if(!a.length) return '';
 	var b = item.tags_ids.split(',')
 	for(var i in a) {
-		a[i] = '<a href="#" class="tag" tag="'+a[i]+'" tagid="'+b[i]+'">'+a[i]+'</a>';
+        var name= a[i];
+        var cn= 'tag_'+name;
+        if(name[0]=='@')
+        {
+            cn='tag_arobase';
+            name= name.substr(1);
+        }
+        else if(name[0]=='#')
+        {
+            cn='tag_hash';
+            name= name.substr(1);
+        }
+		a[i] = '<a href="#" class="tag '+cn+'" tag="'+a[i]+'" tagid="'+b[i]+'">'+name+'</a>';
 	}
 	return '<span class="task-tags">'+a.join(', ')+'</span>';
 };
