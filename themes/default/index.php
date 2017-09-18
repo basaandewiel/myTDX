@@ -63,7 +63,7 @@ $().ready(function(){
 
 <h2><?php mttinfo('title'); ?></h2>
 
-<div id="loading"></div>
+<div id="loading"><progress></progress></div>
 
 <div id="bar">
  <div id="msg"><span class="msg-text"></span><div class="msg-details"></div></div>
@@ -284,7 +284,7 @@ $().ready(function(){
 <div id="space"></div>
 </div>
 
-<div id="footer"><div id="footer_content">Powered by <strong><a href="http://www.mytinytodo.net/">myTinyTodo</a></strong> 1.4.3 </div></div>
+<div id="footer"><div id="footer_content">Powered by <strong><a href="http://www.mytinytodo.net/">myTinyTodo</a></strong> 1.4.3xd (modified) </div></div>
 
 </div>
 </body>
