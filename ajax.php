@@ -11,6 +11,38 @@ set_exception_handler('myExceptionHandler');
 
 require_once('./init.php');
 
+
+
+global $backup_file;
+$backup_file= '';
+register_shutdown_function('backup_cleanup');
+
+function db_backup()
+{
+	global $backup_file;
+	if($backup_file) return; // already done
+	$f= MTTPATH.'db/todolist.db';
+	if(file_exists($f)) // may not be a sqlite :(
+	{
+		$nf= preg_replace('/\.db$/','-'.date("Ymd-His-").$_SERVER['REMOTE_ADDR'].'.db',$f);
+		if(copy($f,$nf)!==FALSE)
+			$backup_file= $nf;
+		if(Config::get('dbbackup'))
+		{
+			// TODO: cleanup (remove obsolete backups)
+		}
+	}
+}
+
+function backup_cleanup()
+{
+	// Remove backup file iff unchanged
+	global 	$backup_file;
+	if(!$backup_file) return;
+	if(are_files_identical($backup_file, MTTPATH.'db/todolist.db'))
+		unlink($backup_file);
+}
+
 $db = DBConnection::instance();
 
 if(isset($_GET['loadLists']))
@@ -595,7 +627,11 @@ function have_write_access($listId = null)
 
 function check_write_access($listId = null)
 {
-	if(have_write_access($listId)) return;
+	if(have_write_access($listId))
+	{
+		db_backup();
+		return;
+	}
 	jsonExit( array('total'=>0, 'list'=>array(), 'denied'=>1) );
 }
 
