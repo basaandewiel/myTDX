@@ -50,6 +50,7 @@ if(isset($_POST['save']))
 	Config::set('dateformatshort', _post('dateformatshort'));
 	Config::set('title', trim(_post('title')));
 	Config::set('showdate', (int)_post('showdate'));
+	Config::set('alientags', (int)_post('alientags'));
 	Config::save();
 	$t['saved'] = 1;
 	jsonExit($t);
@@ -246,6 +247,14 @@ header('Content-type:text/html; charset=utf-8');
 <td>
  <label><input type="radio" name="showdate" value="1" <?php if(_c('showdate')) echo 'checked="checked"'; ?> /><?php _e('set_enabled');?></label> <br/>
  <label><input type="radio" name="showdate" value="0" <?php if(!_c('showdate')) echo 'checked="checked"'; ?> /><?php _e('set_disabled');?></label>
+</td>
+</tr>
+
+<tr>
+<th><?php _e('set_alientags');?>:</th>
+<td>
+ <label><input type="radio" name="alientags" value="1" <?php if(_c('alientags')) echo 'checked="checked"'; ?> /><?php _e('set_enabled');?></label> <br/>
+ <label><input type="radio" name="alientags" value="0" <?php if(!_c('alientags')) echo 'checked="checked"'; ?> /><?php _e('set_disabled');?></label>
 </td>
 </tr>
 

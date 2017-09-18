@@ -90,6 +90,7 @@ class Config
 		'dateformatshort' => array('default'=>'j M', 'type'=>'s'),
 		'template' => array('default'=>'default', 'type'=>'s'),
 		'showdate' => array('default'=>0, 'type'=>'i'),
+		'alientags' => array('default'=>0, 'type'=>'i'),
 	);
 
 	public static $config;

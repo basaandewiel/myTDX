@@ -1392,11 +1392,12 @@ function toggleEditAllTags(show)
 	}
 };
 
-function fillEditAllTags()
+function fillEditAllTags() // show tags below a task
 {
 	var a = [];
-	for(var i=tagsList.length-1; i>=0; i--) { 
-		a.push('<a href="#" class="tag" tag="'+tagsList[i].tag+'">'+tagsList[i].tag+'</a>');
+	for(var i=tagsList.length-1; i>=0; i--) {
+		if(_mtt.options.alientags || tagsList[i].alien!=1)
+			a.push('<a href="#" class="'+(tagsList[i].alien==1?'tag_alien ':'')+'tag" tag="'+tagsList[i].tag+'">'+tagsList[i].tag+'</a>');
 	}
 	$('#alltags .tags-list').html(a.join(', '));
 	$('#alltags').show();
@@ -1420,7 +1421,8 @@ function loadTags(listId, callback)
 		else tagsList = json.cloud;
 		var cloud = '';
 		$.each(tagsList, function(i,item){
-			cloud += ' <a href="#" tag="'+item.tag+'" tagid="'+item.id+'" class="tag w'+item.w+'" >'+item.tag+'</a>';
+			if(item.alien!=1)
+				cloud += ' <a href="#" tag="'+item.tag+'" tagid="'+item.id+'" class="tag w'+item.w+'" >'+item.tag+'</a>';
 		});
 		$('#tagcloudcontent').html(cloud)
 		flag.tagsChanged = false;
@@ -2167,7 +2169,7 @@ function saveSettings(frm)
 {
 	if(!frm) return false;
 	var params = { save:'ajax' };
-	$(frm).find("input:text,input:password,input:checked,select").filter(":enabled").each(function() { params[this.name || '__'] = this.value; }); 
+	$(frm).find("input:text,input:password,input:checked,select").filter(":enabled").each(function() { params[this.name || '__'] = this.value; });
 	$(frm).find(":submit").attr('disabled','disabled').blur();
 	$.post(_mtt.mttUrl+'settings.php', params, function(json){
 		if(json.saved) {
