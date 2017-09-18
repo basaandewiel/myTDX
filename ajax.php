@@ -3,44 +3,51 @@
 /*
 	This file is part of myTinyTodo.
 	(C) Copyright 2009-2010 Max Pozdeev <maxpozdeev@gmail.com>
+	(C) Copyright 2017 Jeremie Francois <jeremie.francois@gmail.com>
 	Licensed under the GNU GPL v2 license. See file COPYRIGHT for details.
 */ 
 
 set_error_handler('myErrorHandler');
 set_exception_handler('myExceptionHandler');
-
 require_once('./init.php');
 
+global $backed;
+$backed= FALSE;
+register_shutdown_function('backup_enforce');
 
-
-global $backup_file;
-$backup_file= '';
-register_shutdown_function('backup_cleanup');
-
+// Just call this function before editing the database
 function db_backup()
 {
-	global $backup_file;
-	if($backup_file) return; // already done
+	global $backed;
+	if($backed) return; // already done
 	$f= MTTPATH.'db/todolist.db';
-	if(file_exists($f)) // may not be a sqlite :(
-	{
-		$nf= preg_replace('/\.db$/','-'.date("Ymd-His-").$_SERVER['REMOTE_ADDR'].'.db',$f);
-		if(copy($f,$nf)!==FALSE)
-			$backup_file= $nf;
-		if(Config::get('dbbackup'))
-		{
-			// TODO: cleanup (remove obsolete backups)
-		}
-	}
+	$b= MTTPATH.'db/backup.db';
+	if(file_exists($f)) // only if we use sqlite!
+		if(copy($f,MTTPATH.'db/backup.db')!==FALSE)
+			$backed= TRUE;
 }
 
-function backup_cleanup()
+function backup_enforce()
 {
 	// Remove backup file iff unchanged
-	global 	$backup_file;
-	if(!$backup_file) return;
-	if(are_files_identical($backup_file, MTTPATH.'db/todolist.db'))
-		unlink($backup_file);
+	global 	$backed;
+	if(!$backed) return TRUE;
+
+	$f= MTTPATH.'db/todolist.db';
+	$b= MTTPATH.'db/backup.db';
+	if(are_files_identical($b,$f)) return TRUE;
+
+	$days= Config::get('dbbackup') * 3600 * 24;
+	$now= time();
+	foreach(glob(MTTPATH.'db/todolist-*.db') as $f)
+	{
+		$t= filemtime($f);
+		if($t>$now-60 || $t<$now-$days) // delete if old enough, or if less than 1 minute ago (reduce pollution)
+			unlink($f);
+	}
+
+	// Only now we save current backup (so we are safe from the cleanup procedure above)
+	rename($b, MTTPATH.'db/todolist-'.date("Ymd-His-").$_SERVER['REMOTE_ADDR'].'.db');
 }
 
 $db = DBConnection::instance();

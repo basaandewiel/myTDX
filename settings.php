@@ -260,7 +260,7 @@ header('Content-type:text/html; charset=utf-8');
 </tr>
 
 <tr>
-<th><?php _e('set_dbbackup');?>:</th>
+<th><?php _e('set_dbbackup');?>:<br/><span class="descr"><?php _e('set_dbbackup_descr');?></span></th>
 <td>
  <select name="dbbackup"><?php echo selectOptions(array(
 		0=>__('set_always'),
