@@ -326,12 +326,13 @@ var mytinytodo = window.mytinytodo = _mtt = {
 		// tasklist handlers
 		$("#tasklist").bind("click", tasklistClick);
 		
-		$('#tasklist li').live('dblclick', function(){
-			//clear selection
+		$('#tasklist li').live('dblclick', tasklistDoubleClick);
+
+		$('#tasklist .task-xref').live('click', function(){
+			//clear selection (see tasklistDoubleClick)
 			if(document.selection && document.selection.empty && document.selection.createRange().text) document.selection.empty();
 			else if(window.getSelection) window.getSelection().removeAllRanges();
-			
-			var li = findParentNode(this, 'LI');
+			var li = findParentNode(this, 'LI')
 			if(li && li.id) {
 				var id = li.id.split('_',2)[1];
 				if(id) editTask(parseInt(id));
@@ -457,7 +458,7 @@ var mytinytodo = window.mytinytodo = _mtt = {
 			return false;
 		});
 		
-		$(".mtt-back-button").live('click', function(){ _mtt.pageBack(); this.blur(); return false; } );
+		$(".mtt-back-button").live('click', function(){ history.pushState(null, null, '?'); _mtt.pageBack(); this.blur(); return false; } );
 
 		$(window).bind('beforeunload', function() {
 			if(_mtt.pages.current.page == 'taskedit' && flag.editFormChanged) {
@@ -821,7 +822,9 @@ function prepareTaskStr(item, noteExp)
 		'<div class="task-middle"><div class="task-through-right">'+prepareDuedate(item)+
 		'<span class="task-date-completed"><span title="'+item.dateInlineTitle+'">'+item.dateInline+'</span>&#8212;'+
 		'<span title="'+item.dateCompletedInlineTitle+'">'+item.dateCompletedInline+'</span></span></div>'+"\n"+
-		'<div class="task-through">'+preparePrio(prio,id)+'<span class="task-title">'+prepareHtml(item.title)+'</span> '+
+		'<div class="task-through">'+
+		'<span class="task-xref"><a href="#">#'+id+'</a></span>'+
+		preparePrio(prio,id)+'<span class="task-title">'+prepareHtml(item.title)+'</span> '+
 		(curList.id == -1 ? '<span class="task-listname">'+ tabLists.get(item.listId).name +'</span>' : '') +	"\n" +
 		prepareTagsStr(item)+'<span class="task-date">'+item.dateInlineTitle+'</span></div>'+
 		'<div class="task-note-block">'+
@@ -1292,6 +1295,9 @@ function editTask(id)
 	var item = taskList[id];
 	if(!item) return false;
 	// no need to clear form
+
+	history.pushState(null, null, '?tid='+id); // make this page addressable via a dedicated URL
+
 	var form = document.getElementById('taskedit_form');
 	form.task.value = dehtml(item.title);
 	form.note.value = item.noteText;
@@ -1881,6 +1887,20 @@ function tasklistClick(e)
 			if($(li).is('.clicked')) $(li).toggleClass('doubleclicked');
 			else $(li).addClass('clicked');
 		}
+	}
+};
+
+
+function tasklistDoubleClick(e)
+{
+	//clear selection
+	if(document.selection && document.selection.empty && document.selection.createRange().text) document.selection.empty();
+	else if(window.getSelection) window.getSelection().removeAllRanges();
+
+	var li = findParentNode(e.target, 'LI');
+	if(li && li.id) {
+		var id = li.id.split('_',2)[1];
+		if(id) editTask(parseInt(id));
 	}
 };
 

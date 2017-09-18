@@ -22,4 +22,3 @@ define('TEMPLATEPATH', MTTPATH. 'themes/'.Config::get('template').'/');
 
 require(TEMPLATEPATH. 'index.php');
 
-?>

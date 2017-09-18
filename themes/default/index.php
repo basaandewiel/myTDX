@@ -54,6 +54,10 @@ $().ready(function(){
 		<?php if(isset($_GET['list'])) echo ",openList: ". (int)$_GET['list']; ?>
 		<?php if(isset($_GET['pda'])) echo ", touchDevice: true"; ?>
 	}).loadLists(1);
+
+	<?php if(_get('tid'))?>
+		window.mytinytodo.editTask(parseInt('<?php echo (int)_get('tid');?>'));
+
 });
 </script>
 
