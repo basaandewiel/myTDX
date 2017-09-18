@@ -28,6 +28,9 @@
 <script type="text/javascript" src="<?php mttinfo('mtt_url'); ?>mytinytodo_ajax_storage.js?v=1.4.3"></script>
 
 <script type="text/javascript">
+
+externalSearch='<?php echo(_get('s'))?>';
+
 $().ready(function(){
 
 	<?php if(isset($_GET['pda'])): ?>
@@ -54,9 +57,6 @@ $().ready(function(){
 		<?php if(isset($_GET['list'])) echo ",openList: ". (int)$_GET['list']; ?>
 		<?php if(isset($_GET['pda'])) echo ", touchDevice: true"; ?>
 	}).loadLists(1);
-
-	<?php if(_get('tid'))?>
-		window.mytinytodo.editTask(parseInt('<?php echo (int)_get('tid');?>'));
 
 });
 </script>
@@ -154,6 +154,7 @@ $().ready(function(){
 
 <h3 class="mtt-inadd"><?php _e('add_task');?></h3>
 <h3 class="mtt-inedit"><?php _e('edit_task');?>
+	<span id="taskedit-tid"></span>
  <div id="taskedit-date" class="mtt-inedit">
   (<span class="date-created" title="<?php _e('taskdate_created');?>"><span></span></span><span class="date-completed" title="<?php _e('taskdate_completed');?>"> &mdash; <span></span></span>)
  </div>
@@ -175,7 +176,7 @@ $().ready(function(){
 <div class="form-row-short-end"></div>
 <div class="form-row"><div class="h"><?php _e('task');?></div> <input type="text" name="task" value="" class="in500" maxlength="250" /></div>
 <div class="form-row"><div class="h"><?php _e('note');?></div> <textarea name="note" class="in500"></textarea></div>
-<div class="form-row"><div class="h"><?php _e('tags');?></div>
+<div class="form-row"><div class="h"><?php _e('tags');?><span class='descr'><?php _e('tags_descr');?></span></div>
  <table cellspacing="0" cellpadding="0" width="100%"><tr>
   <td><input type="text" name="tags" id="edittags" value="" class="in500" maxlength="250" /></td>
   <td class="alltags-cell">

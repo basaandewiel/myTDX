@@ -49,6 +49,7 @@ class DefaultLang
 		'task' => "Task",
 		'note' => "Note",
 		'tags' => "Tags",
+		'tags_descr' => "(prefixes: =state, @user, !highlight)",
 		'save' => "Save",
 		'cancel' => "Cancel",
 		'password' => "Password",

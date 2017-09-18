@@ -216,7 +216,7 @@ li.task-completed .task-note-block .task-note { text-decoration:line-through; }
 .invisible { visibility:hidden; }
 .in500 { width:500px; color:#444444; }
 .in100 { width:100px; color:#444444; }
-.task-note span a { color:#777777; }
+.task-note span a { text-decoration: none; color:#A0A0FF; }
 .task-note span a:hover { color:#af0000; }
 
 .task-prio { padding-left:2px; padding-right:2px; margin-left:0px; margin-right:5px; cursor:default; }
@@ -225,11 +225,12 @@ li.task-completed .task-note-block .task-note { text-decoration:line-through; }
 .prio-pos-1 { background-color:#ff7700; color:#ffffff; }
 .prio-zero { /*background-color:#dedede;*/ }
 .task-prio.prio-zero { display:none; }
-.task-xref { font-size:80%; padding-right:4px; }
-.task-xref a { text-decoration: none; color:#A0A0FF; }
+.task-xref { font-size:80%; padding-right:4px; text-decoration: none; color:#A0A0FF; }
+.task-note .task-xref a { text-decoration: underline; }
 
 .form-row { margin-top:8px; }
 .form-row .h { font-weight:bold; color:#333333; }
+.form-row .descr { padding-left:1em; font-weight:100; font-size:0.8em; font-weight:normal; color:#222; }
 .form-row-short-end { clear:both; }
 #page_taskedit .form-row .in500 { width:99%; }
 #page_taskedit .form-row textarea.in500 { height:200px; /*resize:none;*/ }
