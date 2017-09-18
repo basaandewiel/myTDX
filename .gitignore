@@ -37,3 +37,4 @@ obj
 *.gcode
 *.b#?
 *.s#?
+todolist-*-*.db
