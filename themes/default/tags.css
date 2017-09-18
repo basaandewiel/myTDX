@@ -1,24 +1,39 @@
-.tag_arobase {
+/* CSS for tag kinds @username or #status */
+
+.task-tags IMG {
+    height: 12px;
+    padding-right:4px;
+    vertical-align: bottom;
+    padding-bottom: 2px;
+}
+
+.task-tags .tag_arobase {
 	border: 1px solid gray;
 	padding-left: 4px;
 	padding-right: 4px;
-	background-color: #AAFFDD;
-	border-radius: 2px;
+	background-color: #44FF88;
+	border-radius: 3px;
+    text-decoration: none;
 }
 
-.tag_hash {
-	border: 1px solid gray;
+.task-tags .tag_hash {
+	border: 1px solid red;
+	background-color: yellow;
+	color: black;
 	padding-left: 4px;
 	padding-right: 4px;
-	background-color: #FFAADD;
-	border-radius: 2px;
+	border-radius: 3px;
+    text-decoration: none;
 }
 
-
-.tag_taf {
+.task-tags .tag_highlight {
+	width: 1em;
+	height: 100%;
 	border: 1px solid gray;
-	padding-left: 4px;
-	padding-right: 4px;
-	background-color: #FF8888;
-	border-radius: 2px;
+	border-radius: 1em;
+    padding: 0px 4px 0px 4px;
+    text-decoration: none;
+    background-color: #DDDDFF;
 }
+
+/* Specific CSS for specific tags: use "tag_yourname" */

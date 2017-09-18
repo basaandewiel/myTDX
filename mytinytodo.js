@@ -855,21 +855,30 @@ function prepareTagsStr(item)
 	if(!item.tags || item.tags == '') return '';
 	var a = item.tags.split(',');
 	if(!a.length) return '';
-	var b = item.tags_ids.split(',')
+	var b = item.tags_ids.split(',');
+    var img='';
 	for(var i in a) {
         var name= a[i];
         var cn= 'tag_'+name+' ';
+        var img='';
         if(name[0]=='@')
         {
             cn='tag_arobase ';
             name= name.substr(1);
+            img='<img src="themes/default/images/user.png">';
         }
         else if(name[0]=='#')
         {
             cn='tag_hash ';
             name= name.substr(1);
+            img='<img src="themes/default/images/time.png">';
         }
-		a[i] = '<a href="#" class="'+cn+' tag" tag="'+a[i]+'" tagid="'+b[i]+'">'+name+'</a>';
+        else if(name[0]=='!')
+        {
+            cn='tag_highlight ';
+            name= name.substr(1);
+        }
+		a[i] = '<a href="#" class="'+cn+' tag" tag="'+a[i]+'" tagid="'+b[i]+'">'+img+name+'</a>';
 	}
 	return '<span class="task-tags">'+a.join(', ')+'</span>';
 };
