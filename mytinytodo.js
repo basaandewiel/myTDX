@@ -328,15 +328,24 @@ var mytinytodo = window.mytinytodo = _mtt = {
 		
 		$('#tasklist li').live('dblclick', tasklistDoubleClick);
 
-		$('#tasklist .task-xref').live('click', function(){
+		$('.task-xref').live('click', function(e){
 			//clear selection (see tasklistDoubleClick)
 			if(document.selection && document.selection.empty && document.selection.createRange().text) document.selection.empty();
 			else if(window.getSelection) window.getSelection().removeAllRanges();
-			var li = findParentNode(this, 'LI')
-			if(li && li.id) {
-				var id = li.id.split('_',2)[1];
-				if(id) editTask(parseInt(id));
+			var id= 0;
+			if(this.getAttribute('tid'))
+				id= parseInt(this.getAttribute('tid'));
+			else
+			{
+				var li = findParentNode(this, 'LI')
+				if(li && li.id) var id = li.id.split('_',2)[1];
 			}
+			if(id)
+			{
+				$('#search').val('='+id); // "=" for ID search (vs. text search)
+				searchTasks(true);
+			}
+
 		});
 
 		$('#tasklist .taskactionbtn').live('click', function(){
@@ -573,8 +582,14 @@ var mytinytodo = window.mytinytodo = _mtt = {
 			_mtt.doAction('listsLoaded');
 			tabSelect(openListId);
 
-			$('#page_tasks').show();
+			if(externalSearch)
+			{
+				$('#search').val(externalSearch);
+				externalSearch='';
+				searchTasks(true);
+			}
 
+			$('#page_tasks').show();
 		});
 
 		if(onInit) updateAccessStatus();
@@ -706,6 +721,8 @@ var mytinytodo = window.mytinytodo = _mtt = {
 
 };
 
+
+
 function addList()
 {
 	var r = prompt(_mtt.lang.get('addList'), _mtt.lang.get('addListDefault'));
@@ -805,6 +822,7 @@ function loadTasks(opts)
 		}
 		refreshTaskCnt();
 		$('#tasklist').html(tasks);
+		$('#search').focus();
 	});
 };
 
@@ -823,7 +841,7 @@ function prepareTaskStr(item, noteExp)
 		'<span class="task-date-completed"><span title="'+item.dateInlineTitle+'">'+item.dateInline+'</span>&#8212;'+
 		'<span title="'+item.dateCompletedInlineTitle+'">'+item.dateCompletedInline+'</span></span></div>'+"\n"+
 		'<div class="task-through">'+
-		'<span class="task-xref"><a href="#">#'+id+'</a></span>'+
+		'<a class="task-xref" tid='+id+' href="#">#'+id+'</a>'+
 		preparePrio(prio,id)+'<span class="task-title">'+prepareHtml(item.title)+'</span> '+
 		(curList.id == -1 ? '<span class="task-listname">'+ tabLists.get(item.listId).name +'</span>' : '') +	"\n" +
 		prepareTagsStr(item)+'<span class="task-date">'+item.dateInlineTitle+'</span></div>'+
@@ -839,6 +857,9 @@ function prepareTaskStr(item, noteExp)
 
 function prepareHtml(s)
 {
+	// make xref clickable
+	s = s.replace(/#([0-9]+)/g, '<a class="task-xref" tid=$1 href="#">#$1</a>');
+
 	// make URLs clickable
 	s = s.replace(/(^|\s|>)(www\.([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/gi, '$1<a href="http://$2" target="_blank">$2</a>$4');
 	return s.replace(/(^|\s|>)((?:http|https|ftp):\/\/([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/ig, '$1<a href="$2" target="_blank">$2</a>$4');
@@ -866,13 +887,13 @@ function prepareTagsStr(item)
         var img='';
         if(name[0]=='@')
         {
-            cn='tag_arobase ';
+            cn='tag_user ';
             name= name.substr(1);
             img='<img src="themes/default/images/user.png">';
         }
-        else if(name[0]=='#')
+        else if(name[0]=='=')
         {
-            cn='tag_hash ';
+            cn='tag_time';
             name= name.substr(1);
             img='<img src="themes/default/images/time.png">';
         }
@@ -1296,8 +1317,6 @@ function editTask(id)
 	if(!item) return false;
 	// no need to clear form
 
-	history.pushState(null, null, '?tid='+id); // make this page addressable via a dedicated URL
-
 	var form = document.getElementById('taskedit_form');
 	form.task.value = dehtml(item.title);
 	form.note.value = item.noteText;
@@ -1306,6 +1325,7 @@ function editTask(id)
 	form.duedate.value = item.duedate;
 	form.prio.value = item.prio;
 	$('#taskedit-date .date-created>span').text(item.date);
+	$('#taskedit-tid').text('#'+item.id);
 	if(item.compl) $('#taskedit-date .date-completed').show().find('span').text(item.dateCompleted);
 	else $('#taskedit-date .date-completed').hide();
 	toggleEditAllTags(0);
@@ -1476,9 +1496,19 @@ function searchTasks(force)
 	if(newkeyword == filter.search && !force) return false;
 	filter.search = newkeyword;
 	$('#searchbarkeyword').text(filter.search);
-	if(filter.search != '') $('#searchbar').fadeIn('fast');
+	if(filter.search != '') {
+		$('#searchbar').fadeIn('fast');
+		$('#search_close').show();
+	}
 	else $('#searchbar').fadeOut('fast');
 	loadTasks();
+	if(newkeyword[0]=='=')
+	{
+		// open tasks notes in the search results
+		// TODO: only iff this result is not empty and it has a note!
+		toggleAllNotes(true);
+		history.pushState(null, null, window.location.pathname+'?s='+filter.search); // make this page addressable via a dedicated URL
+	}
 	return false;
 };
 
