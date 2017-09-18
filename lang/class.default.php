@@ -135,6 +135,7 @@ class DefaultLang
 		'set_submit' => "Submit changes",
 		'set_cancel' => "Cancel",
 		'set_showdate' => "Show task date in list",
+		'set_alientags' => "Show tags from other lists",
 	);
 
 	var $js = array();

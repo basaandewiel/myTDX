@@ -23,4 +23,5 @@ $config['dateformat2'] = 'Y-m-d';
 $config['dateformatshort'] = 'j M';
 $config['template'] = 'default';
 $config['showdate'] = 1;
+$config['alientags'] = 1;
 ?>

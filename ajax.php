@@ -337,13 +337,18 @@ elseif(isset($_GET['tagCloud']))
 	$listId = (int)_get('list');
 	check_read_access($listId);
 
-	$q = $db->dq("SELECT name,tag_id,COUNT(tag_id) AS tags_count FROM {$db->prefix}tag2task INNER JOIN {$db->prefix}tags ON tag_id=id ".
-						"WHERE list_id=$listId GROUP BY (tag_id) ORDER BY tags_count ASC");
+	$q = $db->dq("SELECT name,tag_id,COUNT(tag_id) AS tags_count".
+		",(CASE WHEN list_id=$listId THEN 0 ELSE 1 END) AS alien".
+		" FROM {$db->prefix}tag2task INNER JOIN {$db->prefix}tags ON tag_id=id ".
+		"GROUP BY (tag_id) ORDER BY tags_count ASC");
+
 	$at = array();
 	$ac = array();
+	$al = array();
 	while($r = $q->fetch_assoc()) {
 		$at[] = array('name'=>$r['name'], 'id'=>$r['tag_id']);
 		$ac[] = $r['tags_count'];
+		$al[] = $r['alien'];
 	}
 
 	$t = array();
@@ -360,7 +365,12 @@ elseif(isset($_GET['tagCloud']))
 	$step = ($qmax - $qmin)/$grades;
 	foreach($at as $i=>$tag)
 	{
-		$t['cloud'][] = array('tag'=>htmlarray($tag['name']), 'id'=>(int)$tag['id'], 'w'=> tag_size($qmin,$ac[$i],$step) );
+		$t['cloud'][] = array(
+			'tag'=>htmlarray($tag['name']),
+			'id'=>(int)$tag['id'],
+			'w'=> tag_size($qmin,$ac[$i],$step),
+			'alien'=>$al[$i]
+		);
 	}
 	$t['total'] = $count;
 	jsonExit($t);
