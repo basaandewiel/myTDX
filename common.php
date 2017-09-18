@@ -91,6 +91,7 @@ class Config
 		'template' => array('default'=>'default', 'type'=>'s'),
 		'showdate' => array('default'=>0, 'type'=>'i'),
 		'alientags' => array('default'=>0, 'type'=>'i'),
+		'dbbackup' => array('default'=>30, 'type'=>'i', 'options'=>array(0,1,7,30,365)),
 	);
 
 	public static $config;
@@ -204,6 +205,21 @@ class DBConnection
         }
 		return self::$instance;	
 	}
+}
+
+function are_files_identical($fn1, $fn2)
+{
+	if(filesize($fn1) !== filesize($fn2)) return FALSE;
+	if(filetype($fn1) !== filetype($fn2)) return FALSE;
+	if(!$fp1 = fopen($fn1, 'rb')) return FALSE;
+	if(!$fp2 = fopen($fn2, 'rb')) { fclose($fp1); return FALSE; }
+	$same = TRUE;
+	while(!feof($fp1) and !feof($fp2))
+		if(fread($fp1, 16384) !== fread($fp2, 16384)) { $same = FALSE; break; }
+	if(feof($fp1) !== feof($fp2)) $same = FALSE;
+	fclose($fp1);
+	fclose($fp2);
+	return $same;
 }
 
 ?>

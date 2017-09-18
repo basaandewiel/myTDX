@@ -45,8 +45,8 @@ else
 }
 
 $lastVer = '1.4';
-echo '<html><head><meta name="robots" content="noindex,nofollow"><title>myTinyTodo 1.4.3 Setup</title></head><body>'; 
-echo "<big><b>myTinyTodo 1.4.3 Setup</b></big><br><br>";
+echo '<html><head><meta name="robots" content="noindex,nofollow"><title>myTinyTodo 1.4.3x Setup</title></head><body>';
+echo "<h1><b>myTinyTodo 1.4.3 Setup</b></h1><br><br>";
 
 # determine current installed version
 $ver = get_ver($db, $dbtype);
@@ -360,6 +360,7 @@ function myExceptionHandler($e)
 {
 	echo '<br><b>Fatal Error:</b> \''. $e->getMessage() .'\' in <i>'. $e->getFile() .':'. $e->getLine() . '</i>'.
 		"\n<pre>". $e->getTraceAsString() . "</pre>\n";
+	backup_cleanup();
 	exit;
 }
 

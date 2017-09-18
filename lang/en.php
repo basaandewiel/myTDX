@@ -133,9 +133,14 @@ class Lang extends DefaultLang
 		'set_clock' => "Clock format",
 		'set_12hour' => "12-hour",
 		'set_24hour' => "24-hour",
+		'set_7day' => "One week",
+		'set_1month' => "One month",
+		'set_1year' => "One year",
+		'set_always' => "Indefinitely",
 		'set_submit' => "Submit changes",
 		'set_cancel' => "Cancel",
 		'set_showdate' => "Show task date in list",
 		'set_alientags' => "Show tags from other lists",
+		'set_dbbackup' => "How long to keep backups (sqlite only)",
 	);
 }

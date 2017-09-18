@@ -51,6 +51,7 @@ if(isset($_POST['save']))
 	Config::set('title', trim(_post('title')));
 	Config::set('showdate', (int)_post('showdate'));
 	Config::set('alientags', (int)_post('alientags'));
+	Config::set('dbbackup', (int)_post('dbbackup'));
 	Config::save();
 	$t['saved'] = 1;
 	jsonExit($t);
@@ -257,6 +258,18 @@ header('Content-type:text/html; charset=utf-8');
  <label><input type="radio" name="alientags" value="0" <?php if(!_c('alientags')) echo 'checked="checked"'; ?> /><?php _e('set_disabled');?></label>
 </td>
 </tr>
+
+<tr>
+<th><?php _e('set_dbbackup');?>:</th>
+<td>
+ <select name="dbbackup"><?php echo selectOptions(array(
+		0=>__('set_always'),
+		1=>__('set_24hour'),
+		7=>__('set_7day'),
+	 	30=>__('set_1month'),
+	 	365=>__('set_1year')),
+		 _c('dbbackup')); ?></select>
+</td></tr>
 
 <tr><td colspan="2" class="form-buttons">
 
