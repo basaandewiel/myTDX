@@ -2,7 +2,5 @@
 .htaccess
 .htusers
 .idea
-backup.db
-todolist.db
-todolist-*-*.db
-tmp/sessions/sess*
+db/*
+tmp/*
