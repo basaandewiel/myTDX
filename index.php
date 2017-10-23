@@ -5,6 +5,9 @@
 	Licensed under the GNU GPL v2 license. See file COPYRIGHT for details.
 */
 
+if(!is_file('db/config.php') || !is_file('db/todolist.db'))
+    die('Bad or missing configuration. Did you run the <a href="setup.php">setup?</a>');
+
 require_once('./init.php');
 
 $lang = Lang::instance();

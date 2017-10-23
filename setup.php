@@ -8,6 +8,10 @@
 
 set_exception_handler('myExceptionHandler');
 
+if(!is_file('./db/config.php'))
+    copy('db_sample/config.php','db/config.php') or die ('Could not write to '.getcwd().
+        '/db/<br>Please create the directory, and make sure the web server can write to it.');
+
 # Check old config file (prior v1.3)
 require_once('./db/config.php');
 if(!isset($config['db']))
@@ -45,8 +49,8 @@ else
 }
 
 $lastDatabaseVersion = '1.4'; // the last *database* schema revision, hence rarely what get_version() returns!
-echo '<html><head><meta name="robots" content="noindex,nofollow"><title>myTinyTodo '.get_version().' Setup</title></head><body>';
-echo "<h1><b>myTinyTodo ".get_version()." Setup</b></h1><br><br>";
+echo '<html><head><meta name="robots" content="noindex,nofollow"><title>myTDX '.get_version().' Setup</title></head><body>';
+echo '<h1><b>myTDX '.get_version().' setup</b></h1><br><br>';
 
 # determine current installed version
 $this_db_ver = get_db_ver($db, $dbtype);
@@ -225,7 +229,8 @@ if(!$this_db_ver)
 }
 elseif($this_db_ver == $lastDatabaseVersion)
 {
-	exitMessage("Installed version does not require database update.");
+	exitMessage("Installed version does not require database update.".
+        '<br><br>Go to the <a href="index.php">index</a>.');
 }
 else
 {
@@ -264,6 +269,7 @@ else
 	}
 }
 echo "Done<br><br> <b>Attention!</b> Delete this file for security reasons.";
+echo '<br><br>Go to the <a href="index.php">index</a>.';
 printFooter();
 
 
