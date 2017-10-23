@@ -365,7 +365,6 @@ function myExceptionHandler($e)
 {
 	echo '<br><b>Fatal Error:</b> \''. $e->getMessage() .'\' in <i>'. $e->getFile() .':'. $e->getLine() . '</i>'.
 		"\n<pre>". $e->getTraceAsString() . "</pre>\n";
-	backup_cleanup();
 	exit;
 }
 

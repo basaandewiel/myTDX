@@ -5,3 +5,4 @@
 db/config.php
 db/todolist*.db
 tmp/*
+scripts
