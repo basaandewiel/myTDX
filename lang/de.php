@@ -89,6 +89,7 @@ class Lang extends DefaultLang
 		'list_rename' => 'Liste umbenennen',
 		'list_delete' => 'Liste löschen',
 		'list_publish' => 'Liste veröffentlichen',
+		'list_hide' => 'Liste ausblenden',
 		'list_showcompleted' => 'Abgeschlossene Aufgaben anzeigen',
 		'list_clearcompleted' => 'Abgeschlossene Aufgaben löschen',
 		'list_select' => 'Liste auswählen',
