@@ -32,3 +32,5 @@ to change this but it helps keep things tidy. The grayed tags are "borrowed" fro
 - I added a backup system in case you are using sqlite (which I always receommend unless you really
 have a reason to use mysql). Backuped files are kept according to the main settings, and restoration
 must be done manually if ever something terrible happens
+
+- the sqlite sample file "db/todolist_sample_db_to_rename" can be renamed as "db/todolist.db" if you want to see it in action quickly. Without the file, a fresh, blank installation will be performed and the matching "db/config.php" will be overridden as well.
