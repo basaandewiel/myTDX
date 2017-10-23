@@ -6,7 +6,6 @@
 	Original name: Deutsch
 	Author: Pascal / Rene Wagner
 	Author Url: http://www.pascal90.de / https://github.com/guzzisti
-	AppVersion: v1.5.0
 	Date: 2017/10/22
 */
 

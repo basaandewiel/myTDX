@@ -18,15 +18,17 @@ the respective task (and its notes will be opened). The prefixed value in the se
 forces a search by id only. Looking for "123" will match titles, notes or ids of the tasks, which
 is still convenient to find all the tasks that refer to 123 alike.
 
-- the incomping index URL also can provide the search string (use "?i=taskid" or "?s=keyword"). Thus,
+- the incoming index URL also can provide the search string (use "?i=taskid" or "?s=keyword"). Thus,
 pointing directly to a specific task is done with ?i=123. This is convenient in order to send links
-by email, e.g. When you want all related tasks and cross-references you way prefer "?s=123"
+by email, e.g. When you want all related tasks and cross-references you may prefer "?s=123"
 
-- CSS can be customized (there are already a few special prefixes: =state, @user, !highlight). I intend
-to use them like "=acknoledges" or "=closed" for bug tracking, and be able to assign someone with @buddy.
+- style of tags can be customized, in addition to a few special notations: =state, @user, !highlight.
+I intend to use them like "=acknoledged" or "=closed" for bug tracking, to use "!discussion", and
+to assign someone to a task with @buddy for example.
 
 - the tag list at the end of a task being edited now also shows tags from other lists. There is a setting
-to chage this. The grayed tags are "borrowed" from the other lists.
+to change this but it helps keep things tidy. The grayed tags are "borrowed" from the other lists.
 
-- I have added a backup system in case you are using sqlite (which I always receommend unless you really
-have a reason to use mysql). Backups are kept according to the main settings.
+- I added a backup system in case you are using sqlite (which I always receommend unless you really
+have a reason to use mysql). Backuped files are kept according to the main settings, and restoration
+must be done manually if ever something terrible happens

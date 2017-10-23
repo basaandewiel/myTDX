@@ -6,6 +6,11 @@
 	Licensed under the GNU GPL v2 license. See file COPYRIGHT for details.
 */
 
+function get_version()
+{
+    return trim(file_get_contents('version.txt'));
+}
+
 function htmlarray($a, $exclude=null)
 {
 	htmlarray_ref($a, $exclude);

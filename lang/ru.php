@@ -6,7 +6,6 @@
 	Original name: Русский
 	Author: Max Pozdeev
 	Author Url: http://www.mytinytodo.net
-	AppVersion: v1.4.2
 	Date: 2011-03-21
 */
 

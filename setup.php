@@ -44,14 +44,13 @@ else
 	$dbtype = '';
 }
 
-$lastVer = '1.4';
-echo '<html><head><meta name="robots" content="noindex,nofollow"><title>myTinyTodo 1.4.3x Setup</title></head><body>';
-echo "<h1><b>myTinyTodo 1.4.3 Setup</b></h1><br><br>";
+$lastDatabaseVersion = '1.4'; // the last *database* schema revision, hence rarely what get_version() returns!
+echo '<html><head><meta name="robots" content="noindex,nofollow"><title>myTinyTodo '.get_version().' Setup</title></head><body>';
+echo "<h1><b>myTinyTodo ".get_version()." Setup</b></h1><br><br>";
 
 # determine current installed version
-$ver = get_ver($db, $dbtype);
-
-if(!$ver)
+$this_db_ver = get_db_ver($db, $dbtype);
+if(!$this_db_ver)
 {
 	# Which DB to select
 	if(!isset($_POST['installdb']) && !isset($_POST['install']))
@@ -89,7 +88,7 @@ if(!$ver)
 	}
 
 	# install database
-	if($dbtype == 'mysql') 
+	if($dbtype == 'mysql')
 	{
 		try
 		{
@@ -224,39 +223,39 @@ if(!$ver)
 	$db->ex("INSERT INTO {$db->prefix}lists (uuid,name,d_created) VALUES (?,?,?)", array(generateUUID(), 'Todo', time()));
 
 }
-elseif($ver == $lastVer)
+elseif($this_db_ver == $lastDatabaseVersion)
 {
 	exitMessage("Installed version does not require database update.");
 }
 else
 {
-	if(!in_array($ver, array('1.1','1.2','1.3.0','1.3.1'))) {
-		exitMessage("Can not update. Unsupported database version ($ver).");
+	if(!in_array($this_db_ver, array('1.1','1.2','1.3.0','1.3.1'))) {
+		exitMessage("Can not update. Unsupported database version ($this_db_ver).");
 	}
 	if(!isset($_POST['update'])) {
-		exitMessage("Update database v$ver
+		exitMessage("Update database v$this_db_ver
 		<form name=frm method=post><input type=hidden name=update value=1><input type=hidden name=tz value=-1><input type=submit value=' Update '></form>
 		<script type=\"text/javascript\">var tz = -1 * (new Date()).getTimezoneOffset(); document.frm.tz.value = tz;</script>
 		");
 	}
 
 	# update process
-	if($ver == '1.3.1')
+	if($this_db_ver == '1.3.1')
 	{
 		update_131_14($db, $dbtype);
 	}
-	if($ver == '1.3.0')
+	if($this_db_ver == '1.3.0')
 	{
 		update_130_131($db, $dbtype);
 		update_131_14($db, $dbtype);
 	}
-	if($ver == '1.2')
+	if($this_db_ver == '1.2')
 	{
 		update_12_13($db, $dbtype);
 		update_130_131($db, $dbtype);
 		update_131_14($db, $dbtype);
 	}
-	elseif($ver == '1.1')
+	elseif($this_db_ver == '1.1')
 	{
 		update_11_12($db, $dbtype);
 		update_12_13($db, $dbtype);
@@ -268,7 +267,7 @@ echo "Done<br><br> <b>Attention!</b> Delete this file for security reasons.";
 printFooter();
 
 
-function get_ver($db, $dbtype)
+function get_db_ver($db, $dbtype)
 {
 	if(!$db || $dbtype == '') return '';
 	if(!$db->table_exists($db->prefix.'todolist')) return '';

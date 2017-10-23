@@ -6,7 +6,6 @@
 	Original name: English
 	Author: Max Pozdeev & Jeremie Francois
 	Author Url: http://www.mytinytodo.net & www.tecrd.com
-	AppVersion: v1.5.0
 	Date: 2017/09/18
 */
 
