@@ -2,5 +2,7 @@
 .htaccess
 .htusers
 .idea
-db/*
+db/config.php
+db/todolist*.db
 tmp/*
+scripts

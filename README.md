@@ -3,6 +3,10 @@
 As the name suggests, this project is heavily based on an old but very well done ajax todolist
 written by maxpozdeev/mytinytodo (http://www.mytinytodo.net/). It also works quite well on mobile phones.
 
+If you are in a hurry, you may just rename the "db_sample/" folder in place of "db/", so it
+bypasses the initial required call of "setup.php". This way you will see it in action quickly.
+Otherwise you will be asked about what and how to configure the todo list.
+
 My fork adds some important features, especially for *sharing with others*, including developers.
 I wanted a small, fast, no-nonsense bugtracking system which anyone can understand, including my
 clients and the end users.
@@ -33,4 +37,3 @@ to change this but it helps keep things tidy. The grayed tags are "borrowed" fro
 have a reason to use mysql). Backuped files are kept according to the main settings, and restoration
 must be done manually if ever something terrible happens
 
-- the sqlite sample file "db/todolist_sample_db_to_rename" can be renamed as "db/todolist.db" if you want to see it in action quickly. Without the file, a fresh, blank installation will be performed and the matching "db/config.php" will be overridden as well.
