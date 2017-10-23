@@ -771,6 +771,13 @@ function deleteCurList()
 	})
 };
 
+
+function hideCurList()
+{
+    if(!curList) return false;
+    hideTab(curList);
+};
+
 function publishCurList()
 {
 	if(!curList) return false;
@@ -1154,18 +1161,32 @@ function toggleAllNotes(show)
 	if(_mtt.options.saveShowNotes) _mtt.db.request('setShowNotesInList', {list:curList.id, shownotes:show}, function(json){});
 };
 
+function listReferenceToId(elementOrId)
+{
+    if(typeof elementOrId == 'undefined')
+        elementOrId = curList;
+    var id;
+    if(typeof elementOrId == 'number')
+        id = elementOrId;
+    else if(typeof elementOrId == 'string')
+        id = parseInt(elementOrId);
+    else
+    {
+        id = $(elementOrId).attr('id');
+        if(!id) return null;
+        if(!isNaN(parseInt(id)))
+            id= parseInt(id);
+        else
+            id = parseInt(id.split('_', 2)[1]);
+    }
+    if(!tabLists.exists(id)) return null;
+    return id;
+}
 
 function tabSelect(elementOrId)
 {
-	var id;
-	if(typeof elementOrId == 'number') id = elementOrId;
-	else if(typeof elementOrId == 'string') id = parseInt(elementOrId);
-	else {
-		id = $(elementOrId).attr('id');
-		if(!id) return;
-		id = parseInt(id.split('_', 2)[1]);
-	}
-	if(!tabLists.exists(id)) return;
+	var id= listReferenceToId(elementOrId);
+    if(id===null) return;
 	$('#lists .mtt-tabs-selected').removeClass('mtt-tabs-selected');
 	$('#list_all').removeClass('mtt-tabs-selected');
 	
@@ -1210,7 +1231,8 @@ function listMenuClick(el, menu)
 	switch(el.id) {
 		case 'btnAddList': addList(); break;
 		case 'btnRenameList': renameCurList(); break;
-		case 'btnDeleteList': deleteCurList(); break;
+        case 'btnDeleteList': deleteCurList(); break;
+        case 'btnHideList': hideCurList(); break;
 		case 'btnPublish': publishCurList(); break;
 		case 'btnExportCSV': exportCurList('csv'); break;
 		case 'btnExportICAL': exportCurList('ical'); break;
@@ -2046,13 +2068,8 @@ function feedCurList()
 
 function hideTab(listId)
 {
-	if(typeof listId != 'number') {
-		var id = $(listId).attr('id');
-		if(!id) return;
-		listId = parseInt(id.split('_', 2)[1]);
-	}
-	
-	if(!tabLists.get(listId)) return false;
+    var listId= listReferenceToId(listId);
+    if(listId===null) return false;
 
 	// if we hide current tab
 	var listIdToSelect = 0;
@@ -2145,7 +2162,7 @@ function updateAccessStatus()
 		$('#mtt_body').addClass('readonly')
 		liveSearchToggle(1);
 		// remove some tab menu items
-		$('#btnRenameList,#btnDeleteList,#btnClearCompleted,#btnPublish').remove();
+		$('#btnRenameList,#btnDeleteList,#btnHideList,#btnClearCompleted,#btnPublish').remove();
 	}
 	else {
 		flag.readOnly = false;

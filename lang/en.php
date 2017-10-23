@@ -89,6 +89,7 @@ class Lang extends DefaultLang
 		'list_rename' => "Rename list",
 		'list_delete' => "Delete list",
 		'list_publish' => "Publish list",
+        'list_hide' => "Hide list",
 		'list_showcompleted' => "Show completed tasks",
 		'list_clearcompleted' => "Clear completed tasks",
 		'list_select' => "Select list",

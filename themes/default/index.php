@@ -230,6 +230,7 @@ $().ready(function(){
 <ul>
  <li class="mtt-need-list mtt-need-real-list" id="btnRenameList"><?php _e('list_rename');?></li>
  <li class="mtt-need-list mtt-need-real-list" id="btnDeleteList"><?php _e('list_delete');?></li>
+ <li class="mtt-need-list mtt-need-real-list" id="btnHideList"><?php _e('list_hide');?></li>
  <li class="mtt-need-list mtt-need-real-list" id="btnClearCompleted"><?php _e('list_clearcompleted');?></li>
  <li class="mtt-need-list mtt-need-real-list mtt-menu-indicator" submenu="listexportmenucontainer"><div class="submenu-icon"></div><?php _e('list_export'); ?></li>
  <li class="mtt-menu-delimiter mtt-need-real-list"></li>
