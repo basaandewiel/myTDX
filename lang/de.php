@@ -49,7 +49,7 @@ class Lang extends DefaultLang
 		'task' => 'Aufgabe',
 		'note' => 'Notiz',
 		'tags' => 'Schlagwörter',
-		'tags_descr' => '(prefixes: =state, @user, !highlight, ~bug)',
+		'tags_descr' => "(prefixes: =state, @user, ~fix, !highlight)",
 		'save' => 'Speichern',
 		'cancel' => 'Abbrechen',
 		'password' => 'Passwort',
