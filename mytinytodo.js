@@ -890,11 +890,11 @@ function prepareTagsStr(item)
 	var img='';
 	for(var i in a) {
 		var name= a[i];
-		var cn= 'tag_'+name+' ';
+		var cn= 'tag_'+name;
 		var img='';
 		if(name[0]=='@')
 		{
-			cn='tag_user ';
+			cn='tag_user';
 			name= name.substr(1);
 			img='<img src="themes/default/images/user.png">';
 		}
@@ -904,9 +904,15 @@ function prepareTagsStr(item)
 			name= name.substr(1);
 			img='<img src="themes/default/images/time.png">';
 		}
+		else if(name[0]=='~')
+		{
+			cn='tag_fixme';
+			name= name.substr(1);
+			img='<img src="themes/default/images/fixme.png">';
+		}
 		else if(name[0]=='!')
 		{
-			cn='tag_highlight ';
+			cn='tag_highlight';
 			name= name.substr(1);
 		}
 		a[i] = '<a href="#" class="'+cn+' tag" tag="'+a[i]+'" tagid="'+b[i]+'">'+img+name+'</a>';

@@ -30,6 +30,16 @@
     text-decoration: none;
 }
 
+.task-tags .tag_fixme {
+	border: 1px solid red;
+	background-color: #FFAAAA;
+	color: black;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-radius: 3px;
+    text-decoration: none;
+}
+
 .task-tags .tag_highlight {
 	width: 1em;
 	height: 100%;
