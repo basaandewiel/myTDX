@@ -181,7 +181,7 @@ li.task-expanded .task-toggle { background-position:-80px -16px; }
 #mtt_body.readonly #tasklist li .task-actions { display:none; }
 .task-listname { background-color:#eee; color:#555; padding:0px 3px; }
 .task-tags { padding:0px 2px; }
-.task-tags .tag { font-size:0.8em; font-weight:bold; color:#333333; text-decoration:underline;  }
+.task-tags .tag { font-size:0.8em; color:#333333; text-decoration:underline;  }
 .task-tags .tag:hover {  }
 .duedate { color:#333333; padding:0px; padding-left:1px; margin-left:5px;  }
 li.task-completed .duedate { /*font-size:0.8em;*/ display:none; }

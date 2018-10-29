@@ -1,5 +1,9 @@
 /* CSS for tag kinds @username or #status */
 
+.task-tags {
+	float: right;
+}
+
 .task-tags IMG {
     height: 12px;
     padding-right:4px;
