@@ -774,8 +774,8 @@ function deleteCurList()
 
 function hideCurList()
 {
-    if(!curList) return false;
-    hideTab(curList);
+	if(!curList) return false;
+	hideTab(curList);
 };
 
 function publishCurList()
@@ -887,28 +887,28 @@ function prepareTagsStr(item)
 	var a = item.tags.split(',');
 	if(!a.length) return '';
 	var b = item.tags_ids.split(',');
-    var img='';
+	var img='';
 	for(var i in a) {
-        var name= a[i];
-        var cn= 'tag_'+name+' ';
-        var img='';
-        if(name[0]=='@')
-        {
-            cn='tag_user ';
-            name= name.substr(1);
-            img='<img src="themes/default/images/user.png">';
-        }
-        else if(name[0]=='=')
-        {
-            cn='tag_time';
-            name= name.substr(1);
-            img='<img src="themes/default/images/time.png">';
-        }
-        else if(name[0]=='!')
-        {
-            cn='tag_highlight ';
-            name= name.substr(1);
-        }
+		var name= a[i];
+		var cn= 'tag_'+name+' ';
+		var img='';
+		if(name[0]=='@')
+		{
+			cn='tag_user ';
+			name= name.substr(1);
+			img='<img src="themes/default/images/user.png">';
+		}
+		else if(name[0]=='=')
+		{
+			cn='tag_time';
+			name= name.substr(1);
+			img='<img src="themes/default/images/time.png">';
+		}
+		else if(name[0]=='!')
+		{
+			cn='tag_highlight ';
+			name= name.substr(1);
+		}
 		a[i] = '<a href="#" class="'+cn+' tag" tag="'+a[i]+'" tagid="'+b[i]+'">'+img+name+'</a>';
 	}
 	return '<span class="task-tags">'+a.join(', ')+'</span>';
@@ -1163,30 +1163,30 @@ function toggleAllNotes(show)
 
 function listReferenceToId(elementOrId)
 {
-    if(typeof elementOrId == 'undefined')
-        elementOrId = curList;
-    var id;
-    if(typeof elementOrId == 'number')
-        id = elementOrId;
-    else if(typeof elementOrId == 'string')
-        id = parseInt(elementOrId);
-    else
-    {
-        id = $(elementOrId).attr('id');
-        if(!id) return null;
-        if(!isNaN(parseInt(id)))
-            id= parseInt(id);
-        else
-            id = parseInt(id.split('_', 2)[1]);
-    }
-    if(!tabLists.exists(id)) return null;
-    return id;
+	if(typeof elementOrId == 'undefined')
+		elementOrId = curList;
+	var id;
+	if(typeof elementOrId == 'number')
+		id = elementOrId;
+	else if(typeof elementOrId == 'string')
+		id = parseInt(elementOrId);
+	else
+	{
+		id = $(elementOrId).attr('id');
+		if(!id) return null;
+		if(!isNaN(parseInt(id)))
+			id= parseInt(id);
+		else
+			id = parseInt(id.split('_', 2)[1]);
+	}
+	if(!tabLists.exists(id)) return null;
+	return id;
 }
 
 function tabSelect(elementOrId)
 {
 	var id= listReferenceToId(elementOrId);
-    if(id===null) return;
+	if(id===null) return;
 	$('#lists .mtt-tabs-selected').removeClass('mtt-tabs-selected');
 	$('#list_all').removeClass('mtt-tabs-selected');
 	
@@ -1231,8 +1231,8 @@ function listMenuClick(el, menu)
 	switch(el.id) {
 		case 'btnAddList': addList(); break;
 		case 'btnRenameList': renameCurList(); break;
-        case 'btnDeleteList': deleteCurList(); break;
-        case 'btnHideList': hideCurList(); break;
+		case 'btnDeleteList': deleteCurList(); break;
+		case 'btnHideList': hideCurList(); break;
 		case 'btnPublish': publishCurList(); break;
 		case 'btnExportCSV': exportCurList('csv'); break;
 		case 'btnExportICAL': exportCurList('ical'); break;
@@ -2068,8 +2068,8 @@ function feedCurList()
 
 function hideTab(listId)
 {
-    var listId= listReferenceToId(listId);
-    if(listId===null) return false;
+	var listId= listReferenceToId(listId);
+	if(listId===null) return false;
 
 	// if we hide current tab
 	var listIdToSelect = 0;
