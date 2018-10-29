@@ -6,3 +6,4 @@ db/config.php
 db/todolist*.db
 tmp/*
 scripts
+db/backup.db
