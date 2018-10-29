@@ -1448,10 +1448,18 @@ function toggleEditAllTags(show)
 
 function fillEditAllTags() // show tags below a task
 {
+	var tl= tagsList;
+	tl.sort(function(i,j){
+		var i1=i.tag.replace(/^=~@!/,'').toLowerCase();
+		var j1=j.tag.replace(/^=~@!/,'').toLowerCase();
+		if(i1>j1) return +1;
+		if(i1<j1) return -1;
+		return 0;
+	});
 	var a = [];
-	for(var i=tagsList.length-1; i>=0; i--) {
-		if(_mtt.options.alientags || tagsList[i].alien!=1)
-			a.push('<a href="#" class="'+(tagsList[i].alien==1?'tag_alien ':'')+'tag" tag="'+tagsList[i].tag+'">'+tagsList[i].tag+'</a>');
+	for(var i=0; i<tl.length; i++) {
+		if(_mtt.options.alientags || tl[i].alien!=1)
+			a.push('<a href="#" class="'+(tl[i].alien==1?'tag_alien ':'')+'tag" tag="'+tl[i].tag+'">'+tl[i].tag+'</a>');
 	}
 	$('#alltags .tags-list').html(a.join(', '));
 	$('#alltags').show();
