@@ -138,6 +138,7 @@ class Lang extends DefaultLang
 		'set_1month' => "One month",
 		'set_1year' => "One year",
 		'set_always' => "Indefinitely",
+		'set_nobackup' => "no backup",
 		'set_submit' => "Submit changes",
 		'set_cancel' => "Cancel",
 		'set_showdate' => "Show task date in list",
