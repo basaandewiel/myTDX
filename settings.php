@@ -267,7 +267,7 @@ header('Content-type:text/html; charset=utf-8');
 		1=>__('set_24hour'),
 		7=>__('set_7day'),
 	 	30=>__('set_1month'),
-	 	365=>__('set_1year')),
+	 	365=>__('set_1year'),
 		-1=>__('set_nobackup')),
 		 _c('dbbackup')); ?></select>
 </td></tr>
