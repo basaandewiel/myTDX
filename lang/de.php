@@ -137,6 +137,7 @@ class Lang extends DefaultLang
 		'set_7day' => '1 Woche',
 		'set_1month' => '1 Monat',
 		'set_1year' => '1 Jahr',
+		'set_nobackup' => 'Keine Sicherung',
 		'set_always' => 'Unbegrenzt',
 		'set_submit' => 'Änderungen speichern',
 		'set_cancel' => 'Abbrechen',
