@@ -32,6 +32,9 @@ function backup_enforce()
 	global 	$backed;
 	if(!$backed) return TRUE;
 
+	// omit backup if configured
+	if (Config::get('dbbackup') == -1) return TRUE;
+	
 	$f= MTTPATH.'db/todolist.db';
 	$b= MTTPATH.'db/backup.db';
 	if(are_files_identical($b,$f)) return TRUE;
