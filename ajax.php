@@ -17,6 +17,9 @@ register_shutdown_function('backup_enforce');
 // Just call this function before editing the database
 function db_backup()
 {
+	// omit backup if configured
+	if (Config::get('dbbackup') == -1) return TRUE;
+		
 	global $backed;
 	if($backed) return; // already done
 	$f= MTTPATH.'db/todolist.db';
@@ -28,6 +31,9 @@ function db_backup()
 
 function backup_enforce()
 {
+	// omit backup if configured
+	if (Config::get('dbbackup') == -1) return TRUE;
+	
 	// Remove backup file iff unchanged
 	global 	$backed;
 	if(!$backed) return TRUE;
