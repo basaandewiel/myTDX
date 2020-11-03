@@ -17,14 +17,16 @@ unambiguously.
 - in addition to existing URL, notes can also embed cross-references to other tasks (just use #taskid).
 When you click on them you are redirected to the respective task.
 
-- this cross-reference is done via an enhanced search. You can now look for "#123" to go to
-the respective task (and its notes will be opened). The prefixed value in the search string
-forces a search by id only. Looking for "123" will match titles, notes or ids of the tasks, which
-is still convenient to find all the tasks that refer to 123 alike.
+- this cross-reference is done via an enhanced search. You can now look for "#123" or simply its number
+to go to the respective task (and its notes will be opened). Looking for non-numerical text will search
+the titles and notes..
 
 - the incoming index URL also can provide the search string (use "?i=taskid" or "?s=keyword"). Thus,
 pointing directly to a specific task is done with ?i=123. This is convenient in order to send links
 by email, e.g. When you want all related tasks and cross-references you may prefer "?s=123"
+There is a very annoying bug though, as URLs cannot point and open a task that is not in the first list!
+
+- notes support markdown syntax (can be deactivated in the settings)
 
 - style of tags can be customized, in addition to a few special notations: =state, @user, !highlight.
 I intend to use them like "=acknoledged" or "=closed" for bug tracking, to use "!discussion", and
