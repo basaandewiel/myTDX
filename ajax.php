@@ -125,10 +125,11 @@ elseif(isset($_GET['loadTasks']))
 		$s = trim(_get('s'));
 		if($s!='')
 		{
-			if($s[0]=='#') // alternate POST version #taskid
-				$sqlWhere .= " AND (id = ".(1*substr($s,1))." )";
+			if($s[0]=='#') $s=substr($s,1);  // alternate POST version #taskid
+			if(is_numeric($s))
+				$sqlWhere .= " AND (id = ".$s.")";
 			else
-				$sqlWhere .= " AND (id = ".(1*$s)." OR title LIKE ". $db->quoteForLike("%%%s%%",$s). " OR note LIKE ". $db->quoteForLike("%%%s%%",$s). ")";
+				$sqlWhere .= " AND (title LIKE ". $db->quoteForLike("%%%s%%",$s). " OR note LIKE ". $db->quoteForLike("%%%s%%",$s). ")";
 		}
 	}
 	$sort = (int)_get('sort');
