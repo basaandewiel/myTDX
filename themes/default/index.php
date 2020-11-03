@@ -14,6 +14,7 @@
 <link rel="stylesheet" type="text/css" href="<?php mttinfo('template_url'); ?>pda.css" media="all" />
 <?php else: ?>
 <link rel="stylesheet" type="text/css" href="<?php mttinfo('template_url'); ?>print.css" media="print" />
+<link rel="stylesheet" type="text/css" href="<?php mttinfo('template_url'); ?>markdown.css" media="print" />
 <link rel="shortcut icon" href="favicon.ico" />
 <?php endif; ?>
 <meta name="viewport" content="width=device-width, initial-scale = 1.0, maximum-scale=2.0, user-scalable=no" />
@@ -27,6 +28,7 @@
 <script type="text/javascript" src="<?php mttinfo('mtt_url'); ?>mytinytodo.js"></script>
 <script type="text/javascript" src="<?php mttinfo('mtt_url'); ?>mytinytodo_lang.php"></script>
 <script type="text/javascript" src="<?php mttinfo('mtt_url'); ?>mytinytodo_ajax_storage.js"></script>
+<script type="text/javascript" src="<?php mttinfo('mtt_url'); ?>drawdown/drawdown.js"></script>
 
 <script type="text/javascript">
 
@@ -54,7 +56,8 @@ $().ready(function(){
 		singletab: <?php echo (isset($_GET['singletab']) || isset($_GET['pda'])) ? "true" : "false"; ?>,
 		duedatepickerformat: "<?php echo htmlspecialchars(Config::get('dateformat2')); ?>",
 		firstdayofweek: <?php echo (int) Config::get('firstdayofweek'); ?>,
-		autotag: <?php echo Config::get('autotag') ? "true" : "false"; ?>
+		autotag: <?php echo Config::get('autotag') ? "true" : "false"; ?>,
+		markdown: <?php echo (int) Config::get('markdown'); ?>
 		<?php if(isset($_GET['list'])) echo ",openList: ". (int)$_GET['list']; ?>
 		<?php if(isset($_GET['pda'])) echo ", touchDevice: true"; ?>
 	}).loadLists(1);

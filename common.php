@@ -84,6 +84,7 @@ class Config
 		'lang' => array('default'=>'en', 'type'=>'s'),
 		'password' => array('default'=>'', 'type'=>'s'),
 		'smartsyntax' => array('default'=>1, 'type'=>'i'),
+		'markdown' => array('default'=>1, 'type'=>'i'),
 		'timezone' => array('default'=>'UTC', 'type'=>'s'),
 		'autotag' => array('default'=>1, 'type'=>'i'),
 		'duedateformat' => array('default'=>1, 'type'=>'i'),

@@ -33,6 +33,7 @@ if(isset($_POST['save']))
 	if(isset($_POST['password']) && $_POST['password'] != '') Config::set('password', $_POST['password']);
 	elseif(!_post('allowpassword')) Config::set('password', '');
 	Config::set('smartsyntax', (int)_post('smartsyntax'));
+	Config::set('markdown', (int)_post('markdown'));
 	// Do not set invalid timezone
 	try {
 	    $tz = trim(_post('timezone'));
@@ -178,6 +179,13 @@ header('Content-type:text/html; charset=utf-8');
 <td>
  <label><input type="radio" name="smartsyntax" value="1" <?php if(_c('smartsyntax')) echo 'checked="checked"'; ?> /><?php _e('set_enabled');?></label> <br/>
  <label><input type="radio" name="smartsyntax" value="0" <?php if(!_c('smartsyntax')) echo 'checked="checked"'; ?> /><?php _e('set_disabled');?></label>
+</td></tr>
+
+<tr>
+<th><?php _e('set_markdown');?>:<br/></th>
+<td>
+ <label><input type="radio" name="markdown" value="1" <?php if(_c('markdown')) echo 'checked="checked"'; ?> /><?php _e('set_enabled');?></label> <br/>
+ <label><input type="radio" name="markdown" value="0" <?php if(!_c('markdown')) echo 'checked="checked"'; ?> /><?php _e('set_disabled');?></label>
 </td></tr>
 
 <tr>

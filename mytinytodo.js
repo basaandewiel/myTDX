@@ -839,6 +839,9 @@ function prepareTaskStr(item, noteExp)
 	// &mdash; = &#8212; = —
 	var id = item.id;
 	var prio = item.prio;
+
+	var notes = prepareHtml(item.note.replace(/<br[^>]*>/ig,''), true);
+
 	return '<li id="taskrow_'+id+'" class="' + (item.compl?'task-completed ':'') + item.dueClass + (item.note!=''?' task-has-note':'') +
 				((curList.showNotes && item.note != '') || noteExp ? ' task-expanded' : '') + prepareTagsClass(item.tags_ids) + '">' +
 		'<div class="task-actions"><a href="#" class="taskactionbtn"></a></div>'+"\n"+
@@ -853,7 +856,7 @@ function prepareTaskStr(item, noteExp)
 		(curList.id == -1 ? '<span class="task-listname">'+ tabLists.get(item.listId).name +'</span>' : '') +	"\n" +
 		prepareTagsStr(item)+'<span class="task-date">'+item.dateInlineTitle+'</span></div>'+
 		'<div class="task-note-block">'+
-			'<div id="tasknote'+id+'" class="task-note"><span>'+prepareHtml(item.note)+'</span></div>'+
+			'<div id="tasknote'+id+'" class="task-note"><div class="plain">'+notes+'</div></div>'+
 			'<div id="tasknotearea'+id+'" class="task-note-area"><textarea id="notetext'+id+'"></textarea>'+
 				'<span class="task-note-actions"><a href="#" class="mtt-action-note-save">'+_mtt.lang.get('actionNoteSave')+
 				'</a> | <a href="#" class="mtt-action-note-cancel">'+_mtt.lang.get('actionNoteCancel')+'</a></span></div>'+
@@ -862,14 +865,22 @@ function prepareTaskStr(item, noteExp)
 };
 
 
-function prepareHtml(s)
+function prepareHtml(s, enableMarkdown=false)
 {
-	// make xref clickable
+	if(enableMarkdown && _mtt.options.markdown) {
+		s = markdown(s);
+		// Still rewrite those links that were not written with the official painful and braindamaged markdown syntax
+		s = s.replace(/(^|\s|>)((?:http|https|ftp):\/\/([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/ig, '$1<a href="$2" target="_blank">$2</a>$4');
+	}
+	else {
+		// make URLs clickable
+		s = s.replace(/\n/g,'<br />');
+		s = s.replace(/(^|\s|>)(www\.([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/gi, '$1<a href="http://$2" target="_blank">$2</a>$4');
+		s = s.replace(/(^|\s|>)((?:http|https|ftp):\/\/([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/ig, '$1<a href="$2" target="_blank">$2</a>$4');
+	}
+	// We alsway make #nnn xrefs clickable as well
 	s = s.replace(/#([0-9]+)/g, '<a class="task-xref" tid=$1 href="#">#$1</a>');
-
-	// make URLs clickable
-	s = s.replace(/(^|\s|>)(www\.([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/gi, '$1<a href="http://$2" target="_blank">$2</a>$4');
-	return s.replace(/(^|\s|>)((?:http|https|ftp):\/\/([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/ig, '$1<a href="$2" target="_blank">$2</a>$4');
+	return s;
 };
 
 function preparePrio(prio,id)
