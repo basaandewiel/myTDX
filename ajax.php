@@ -104,7 +104,7 @@ elseif(isset($_GET['loadTasks']))
 		if(sizeof($tagIds) > 1) {
 			$inner .= "INNER JOIN (SELECT task_id, COUNT(tag_id) AS c FROM {$db->prefix}tag2task WHERE list_id=$listId AND tag_id IN (".
 						implode(',',$tagIds). ") GROUP BY task_id) AS t2t ON id=t2t.task_id";
-			$sqlWhere = " AND c=". sizeof($tagIds); //overwrite sqlWhere!
+			$sqlWhere .= " AND c=". sizeof($tagIds); //overwrite sqlWhere!
 		}
 		elseif($tagIds) {
 			$inner .= "INNER JOIN {$db->prefix}tag2task ON id=task_id";
