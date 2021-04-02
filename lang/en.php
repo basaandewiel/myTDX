@@ -144,6 +144,7 @@ class Lang extends DefaultLang
 		'set_cancel' => "Cancel",
 		'set_showdate' => "Show task date in list",
 		'set_alientags' => "Show tags from other lists",
+		'set_taskxrefs' => "Show task identifiers",
 		'set_dbbackup' => "Keep backups for",
 		'set_dbbackup_descr' => "This works only with sqlite databases",
 	);

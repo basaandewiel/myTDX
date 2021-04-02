@@ -99,6 +99,7 @@ var mytinytodo = window.mytinytodo = _mtt = {
 
 		if(this.options.showdate) $('#page_tasks').addClass('show-inline-date');
 		if(this.options.singletab) $('#lists .mtt-tabs').addClass('mtt-tabs-only-one');
+		if(!this.options.taskxrefs) $('#page_tasks').addClass('hide-task-xref');
 
 		this.parseAnchor();
 

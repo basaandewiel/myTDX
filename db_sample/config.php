@@ -24,4 +24,5 @@ $config['dateformatshort'] = 'j M';
 $config['template'] = 'default';
 $config['showdate'] = 1;
 $config['alientags'] = 1;
+$config['taskxrefs'] = 1;
 $config['dbbackup'] = 0;

@@ -53,6 +53,7 @@ $().ready(function(){
 		isLogged: <?php echo ($needAuth && is_logged()) ? "true" : "false"; ?>,
 		showdate: <?php echo (Config::get('showdate') && !isset($_GET['pda'])) ? "true" : "false"; ?>,
 		alientags: <?php echo (Config::get('alientags') && !isset($_GET['pda'])) ? "true" : "false"; ?>,
+		taskxrefs: <?php echo (Config::get('taskxrefs') && !isset($_GET['pda'])) ? "true" : "false"; ?>,
 		singletab: <?php echo (isset($_GET['singletab']) || isset($_GET['pda'])) ? "true" : "false"; ?>,
 		duedatepickerformat: "<?php echo htmlspecialchars(Config::get('dateformat2')); ?>",
 		firstdayofweek: <?php echo (int) Config::get('firstdayofweek'); ?>,

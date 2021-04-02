@@ -97,6 +97,7 @@ class Config
 		'template' => array('default'=>'default', 'type'=>'s'),
 		'showdate' => array('default'=>0, 'type'=>'i'),
 		'alientags' => array('default'=>0, 'type'=>'i'),
+		'taskxrefs' => array('default'=>0, 'type'=>'i'),
 		'dbbackup' => array('default'=>30, 'type'=>'i', 'options'=>array(-1,0,1,7,30,365)),
 	);
 
