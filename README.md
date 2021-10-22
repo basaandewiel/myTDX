@@ -1,10 +1,15 @@
-**myTDX** (my tiny todo extended)
-**Installation - instructions for Arch linux**
-pacman -S nginx
+# myTDX (my tiny todo extended)
+
+## Installation - instructions for Arch linux
+
+`pacman -S nginx`
+
 add to  /etc/nginx/nginx.conf
-  ...
-  server {
+
+```server {
+  
     listen 5000 default_server;
+
 #       listen [::]:4000 default_server;
     root /srv/http/myTDX;
     server_name _;
@@ -26,20 +31,18 @@ add to  /etc/nginx/nginx.conf
     location ~ /\.ht {
         deny all;
     }
-}
+}```
 
 
-for php it should pass request to port 9000
-#php-fpm //php backend must be started; otherwise '... connection refused from nginx
-git clone <this repo> to /srv/http/myTDX
-systemctl start nginx
-systemctl start php-fpm
-browser: localhost:5000
-    foutmelding over magic quotes in common.php; comment this line
-    error over dat second parameter should be an array
-        just click on one of the specific list (everywhere)
+* for php it should pass request to port 9000
+* ` #php-fpm`  //php backend must be started; otherwise '... connection refused from nginx
+* git clone <this repo> to /srv/http/myTDX
+* systemctl start nginx
+* systemctl start php-fpm
 
- **Original readme.txt**
+* point browser to: localhost:5000
+
+## Original readme.txt
 As the name suggests, this project is heavily based on an old but very well done ajax todolist
 written by maxpozdeev/mytinytodo (http://www.mytinytodo.net/). It also works quite well on mobile phones.
 The older project was resumed years after being frozen, and now the two variants have diverged significantly.
