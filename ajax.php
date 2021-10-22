@@ -146,6 +146,9 @@ elseif(isset($_GET['loadTasks']))
 	elseif($sort == 4) $sqlSort .= "d_edited ASC, prio DESC, ow ASC";			// byDateModified
 	elseif($sort == 104) $sqlSort .= "d_edited DESC, prio ASC, ow DESC";		// byDateModified (reverse)
 	else $sqlSort .= "ow ASC";
+	//baswi added next 2 lines, so default order is duedate ascending
+	$sort = 2;
+	$sqlSort = "ORDER BY compl ASC, ddn ASC, duedate ASC, prio DESC, ow ASC";
 
 	$t = array();
 	$t['total'] = 0;
