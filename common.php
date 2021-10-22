@@ -39,7 +39,7 @@ function stop_gpc(&$arr)
 {
 	if (!is_array($arr)) return 1;
 	
-	if (!get_magic_quotes_gpc()) return 1;
+	//if (!get_magic_quotes_gpc()) return 1;
 	reset($arr);
 	foreach($arr as $k=>$v)
 	{
