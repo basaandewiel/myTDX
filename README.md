@@ -40,6 +40,9 @@ add to  /etc/nginx/nginx.conf
 * systemctl start nginx
 * systemctl start php-fpm
 
+* set db directory and todolist.db writable
+* set db/config/php writable
+
 * point browser to: localhost:5000
 
 ## Original readme.txt
