@@ -1,5 +1,45 @@
 **myTDX** (my tiny todo extended)
+**Installation - instructions for Arch linux**
+pacman -S nginx
+add to  /etc/nginx/nginx.conf
+  ...
+  server {
+    listen 5000 default_server;
+#       listen [::]:4000 default_server;
+    root /srv/http/myTDX;
+    server_name _;
+    autoindex off;
+    proxy_intercept_errors on;
+#       error_page 404 /pihole/index.php;
+    index myTDX/index.php index.php index.html index.htm;
+    location / {
+        expires max;
+        try_files $uri $uri/ =404;
+        add_header X-Pi-hole "A black hole for Internet advertisements";
+    }
+    location ~ \.php$ {
+        include fastcgi.conf;
+        fastcgi_intercept_errors on;
+        fastcgi_pass  127.0.0.1:9000;
+        fastcgi_param SERVER_NAME \$host;
+    }
+    location ~ /\.ht {
+        deny all;
+    }
+}
 
+
+for php it should pass request to port 9000
+#php-fpm //php backend must be started; otherwise '... connection refused from nginx
+git clone <this repo> to /srv/http/myTDX
+systemctl start nginx
+systemctl start php-fpm
+browser: localhost:5000
+    foutmelding over magic quotes in common.php; comment this line
+    error over dat second parameter should be an array
+        just click on one of the specific list (everywhere)
+
+ **Original readme.txt**
 As the name suggests, this project is heavily based on an old but very well done ajax todolist
 written by maxpozdeev/mytinytodo (http://www.mytinytodo.net/). It also works quite well on mobile phones.
 The older project was resumed years after being frozen, and now the two variants have diverged significantly.
