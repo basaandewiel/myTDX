@@ -2,9 +2,22 @@
 
 ## Installation - instructions for Arch linux
 
-`pacman -S nginx`
+### Install necesary packages
+```
+pacman -S nginx
+pacman -S php-cgi
+pacman -S php-fpm
+pacman -S php-sqlite
+pacman -S nginx
+```
 
-add to  /etc/nginx/nginx.conf
+### Configuration files
+* uncomment /etc/php/php.ini ;extension=pdo_sqlite
+* edit /etc/php/php-fpm.d/www.conf
+    * comment line: ;listen = /run/php-fpm/php-fpm.sock"
+    * add line: echo "listen = 127.0.0.1:9000"
+
+* add to  /etc/nginx/nginx.conf
 
 ```
 server {
@@ -33,14 +46,25 @@ server {
 
 * for php it should pass request to port 9000
 * ` #php-fpm`  //php backend must be started; otherwise '... connection refused from nginx
-* git clone <this repo> to /srv/http/myTDX
-* systemctl start nginx
-* systemctl start php-fpm
+* Copy server files
+```
+git clone <this repo> to /srv/http/myTDX
+chown -R http:http *
+systemctl start nginx
+systemctl enable nginx
+systemctl start php-fpm
+systemctl enable php-fpm
+```
+* set db directory and todolist.db writable for http
+* set db/config/php writable for http
 
-* set db directory and todolist.db writable
-* set db/config/php writable
-
-* point browser to: localhost:5000
+* point browser to: localhost:5000/setup.php
+* if problems with port in use:
+```
+netstat -tulpn
+pkill nginx
+systemctl restart nginx
+```
 
 ## Original readme.txt
 As the name suggests, this project is heavily based on an old but very well done ajax todolist
