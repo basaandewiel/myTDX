@@ -13,12 +13,10 @@ server {
     server_name _;
     autoindex off;
     proxy_intercept_errors on;
-#       error_page 404 /pihole/index.php;
     index myTDX/index.php index.php index.html index.htm;
     location / {
         expires max;
         try_files $uri $uri/ =404;
-#        add_header MY TDx "My TDX";
     }
     location ~ \.php$ {
         include fastcgi.conf;
