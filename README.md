@@ -6,11 +6,9 @@
 
 add to  /etc/nginx/nginx.conf
 
-```server {
-  
+```
+server {
     listen 5000 default_server;
-
-#       listen [::]:4000 default_server;
     root /srv/http/myTDX;
     server_name _;
     autoindex off;
@@ -20,7 +18,7 @@ add to  /etc/nginx/nginx.conf
     location / {
         expires max;
         try_files $uri $uri/ =404;
-        add_header X-Pi-hole "A black hole for Internet advertisements";
+#        add_header MY TDx "My TDX";
     }
     location ~ \.php$ {
         include fastcgi.conf;
