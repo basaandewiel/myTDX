@@ -31,7 +31,8 @@ add to  /etc/nginx/nginx.conf
     location ~ /\.ht {
         deny all;
     }
-}```
+}
+```
 
 
 * for php it should pass request to port 9000
