@@ -43,8 +43,6 @@ server {
 }
 ```
 
-
-* for php it should pass request to port 9000
 * ` #php-fpm`  //php backend must be started; otherwise '... connection refused from nginx
 * Copy server files
 ```
