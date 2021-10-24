@@ -17,9 +17,6 @@ register_shutdown_function('backup_enforce');
 // Just call this function before editing the database
 function db_backup()
 {
-	// omit backup if configured
-	if (Config::get('dbbackup') == -1) return TRUE;
-		
 	global $backed;
 	if($backed) return; // already done
 	$f= MTTPATH.'db/todolist.db';
@@ -31,9 +28,6 @@ function db_backup()
 
 function backup_enforce()
 {
-	// omit backup if configured
-	if (Config::get('dbbackup') == -1) return TRUE;
-	
 	// Remove backup file iff unchanged
 	global 	$backed;
 	if(!$backed) return TRUE;
@@ -79,10 +73,13 @@ elseif(isset($_GET['loadTasks']))
 
 	$sqlWhere = $inner = '';
 	if($listId == -1) {
-		//baswi: executed when all lists are selected
 		$userLists = getUserListsSimple();
-		//baswi: next line gives error on second param that should be an array
+//200131 baswi: exchanged order of implode parameters; order of params is since php verion x, fixed
+//		$sqlWhere .= " AND {$db->prefix}todolist.list_id IN (". implode(array_keys($userLists), ','). ") ";
 		$sqlWhere .= " AND {$db->prefix}todolist.list_id IN (". implode(',', array_keys($userLists)). ") ";
+
+
+
 	}
 	else $sqlWhere .= " AND {$db->prefix}todolist.list_id=". $listId;
 	if(_get('compl') == 0) $sqlWhere .= ' AND compl=0';
@@ -106,7 +103,7 @@ elseif(isset($_GET['loadTasks']))
 		if(sizeof($tagIds) > 1) {
 			$inner .= "INNER JOIN (SELECT task_id, COUNT(tag_id) AS c FROM {$db->prefix}tag2task WHERE list_id=$listId AND tag_id IN (".
 						implode(',',$tagIds). ") GROUP BY task_id) AS t2t ON id=t2t.task_id";
-			$sqlWhere .= " AND c=". sizeof($tagIds); //overwrite sqlWhere!
+			$sqlWhere = " AND c=". sizeof($tagIds); //overwrite sqlWhere!
 		}
 		elseif($tagIds) {
 			$inner .= "INNER JOIN {$db->prefix}tag2task ON id=task_id";
@@ -127,11 +124,10 @@ elseif(isset($_GET['loadTasks']))
 		$s = trim(_get('s'));
 		if($s!='')
 		{
-			if($s[0]=='#') $s=substr($s,1);  // alternate POST version #taskid
-			if(is_numeric($s))
-				$sqlWhere .= " AND (id = ".$s.")";
+			if($s[0]=='#') // alternate POST version #taskid
+				$sqlWhere .= " AND (id = ".(1*substr($s,1))." )";
 			else
-				$sqlWhere .= " AND (title LIKE ". $db->quoteForLike("%%%s%%",$s). " OR note LIKE ". $db->quoteForLike("%%%s%%",$s). ")";
+				$sqlWhere .= " AND (id = ".(1*$s)." OR title LIKE ". $db->quoteForLike("%%%s%%",$s). " OR note LIKE ". $db->quoteForLike("%%%s%%",$s). ")";
 		}
 	}
 	$sort = (int)_get('sort');
@@ -145,9 +141,6 @@ elseif(isset($_GET['loadTasks']))
 	elseif($sort == 4) $sqlSort .= "d_edited ASC, prio DESC, ow ASC";			// byDateModified
 	elseif($sort == 104) $sqlSort .= "d_edited DESC, prio ASC, ow DESC";		// byDateModified (reverse)
 	else $sqlSort .= "ow ASC";
-	//baswi added next 2 lines, so default order is duedate ascending
-	$sort = 2;
-	$sqlSort = "ORDER BY compl ASC, ddn ASC, duedate ASC, prio DESC, ow ASC";
 
 	$t = array();
 	$t['total'] = 0;
@@ -372,8 +365,22 @@ elseif(isset($_GET['suggestTags']))
 	$begin = trim(_get('q'));
 	$limit = (int)_get('limit');
 	if($limit<1) $limit = 8;
-	$q = $db->dq("SELECT name,id FROM {$db->prefix}tags INNER JOIN {$db->prefix}tag2task ON id=tag_id WHERE list_id=$listId AND name LIKE ".
+
+	//baswi: in original query there was condition on list-id; what does not seem necessary
+	// further list_id was not defined, for new tasks, because TaskId was not defined in mytinytodos.js
+	// if -1 was returned, the taskId, and so also the ListId is not defined
+	// So I removed this condition in the query; the other commented code was inserted by Chrisje, but is probably not necessary
+//	if ($listId === -1) {
+		$q = $db->dq("SELECT name,id FROM {$db->prefix}tags INNER JOIN {$db->prefix}tag2task ON id=tag_id AND name LIKE ".
 					$db->quoteForLike('%s%%',$begin) ." GROUP BY tag_id ORDER BY name LIMIT $limit");
+//	} else {
+//		$q = $db->dq("SELECT name,id FROM {$db->prefix}tags INNER JOIN {$db->prefix}tag2task ON id=tag_id WHERE list_id=$listId AND name LIKE ".
+//					$db->quoteForLike('%s%%',$begin) ." GROUP BY tag_id ORDER BY name LIMIT $limit");
+//original query
+			//		$q = $db->dq("SELECT name,id FROM {$db->prefix}tags INNER JOIN {$db->prefix}tag2task ON id=tag_id WHERE list_id=$listId AND name LIKE ".
+			//$db->quoteForLike('%s%%',$begin) ." GROUP BY tag_id ORDER BY name LIMIT $limit");
+//}
+
 	$s = '';
 	while($r = $q->fetch_row()) {
 		$s .= "$r[0]|$r[1]\n";

@@ -1,104 +1,39 @@
-# myTDX (my tiny todo extended)
+**myTDX** (my tiny todo extended)
 
-## Installation - instructions for Arch linux
-
-### Install necesary packages
-```
-pacman -S nginx
-pacman -S php-cgi
-pacman -S php-fpm
-pacman -S php-sqlite
-pacman -S nginx
-```
-
-### Configuration files
-* uncomment /etc/php/php.ini ;extension=pdo_sqlite
-* edit /etc/php/php-fpm.d/www.conf
-    * comment line: ;listen = /run/php-fpm/php-fpm.sock"
-    * add line: echo "listen = 127.0.0.1:9000"
-
-* add to  /etc/nginx/nginx.conf
-
-```
-server {
-    listen 5000 default_server;
-    root /srv/http/myTDX;
-    server_name _;
-    autoindex off;
-    proxy_intercept_errors on;
-    index myTDX/index.php index.php index.html index.htm;
-    location / {
-        expires max;
-        try_files $uri $uri/ =404;
-    }
-    location ~ \.php$ {
-        include fastcgi.conf;
-        fastcgi_intercept_errors on;
-        fastcgi_pass  127.0.0.1:9000;
-        fastcgi_param SERVER_NAME \$host;
-    }
-    location ~ /\.ht {
-        deny all;
-    }
-}
-```
-
-* ` #php-fpm`  //php backend must be started; otherwise '... connection refused from nginx
-* Copy server files
-```
-git clone <this repo> to /srv/http/myTDX
-chown -R http:http *
-systemctl start nginx
-systemctl enable nginx
-systemctl start php-fpm
-systemctl enable php-fpm
-```
-* set db directory and todolist.db writable for http
-* set db/config/php writable for http
-
-* point browser to: localhost:5000/setup.php
-* if problems with port in use:
-```
-netstat -tulpn
-pkill nginx
-systemctl restart nginx
-```
-
-## Original readme.txt
 As the name suggests, this project is heavily based on an old but very well done ajax todolist
 written by maxpozdeev/mytinytodo (http://www.mytinytodo.net/). It also works quite well on mobile phones.
-The older project was resumed years after being frozen, and now the two variants have diverged significantly.
 
-To see it in action ASAP, just rename "db_sample/" as "db/" to bypass the quick setup.
+If you are in a hurry, you may just rename the "db_sample/" folder in place of "db/", so it
+bypasses the initial required call of "setup.php". This way you will see it in action quickly.
+Otherwise you will be asked about what and how to configure the todo list.
 
 My fork adds some important features, especially for *sharing with others*, including developers.
 I wanted a small, fast, no-nonsense bugtracking system which anyone can understand, including my
 clients and the end users.
 
 - most notably, tasks now have visible identifiers to refer to. There was no way to point to tasks
-unambiguously (new in v1.5.3: an option in the Settings lets you hide them).
+unambiguously.
 
 - in addition to existing URL, notes can also embed cross-references to other tasks (just use #taskid).
 When you click on them you are redirected to the respective task.
 
-- this cross-reference is done via an enhanced search. You can now look for "#123" or simply its number
-to go to the respective task (and its notes will be opened). Looking for non-numerical text will search
-the titles and notes.
+- this cross-reference is done via an enhanced search. You can now look for "#123" to go to
+the respective task (and its notes will be opened). The prefixed value in the search string
+forces a search by id only. Looking for "123" will match titles, notes or ids of the tasks, which
+is still convenient to find all the tasks that refer to 123 alike.
 
 - the incoming index URL also can provide the search string (use "?i=taskid" or "?s=keyword"). Thus,
 pointing directly to a specific task is done with ?i=123. This is convenient in order to send links
 by email, e.g. When you want all related tasks and cross-references you may prefer "?s=123"
-There is a *very annoying bug* though, as URLs cannot point and open a task that is not in the first list.
 
-- 1.5.2: you can write markdown in the notes (it can be deactivated in the settings)
+- style of tags can be customized, in addition to a few special notations: =state, @user, !highlight.
+I intend to use them like "=acknoledged" or "=closed" for bug tracking, to use "!discussion", and
+to assign someone to a task with @buddy for example.
 
-- the styles of tags can be customized easily, in addition to a few special prefixes: =state, @user, !highlight.
-I use them like "=acknoledged" or "=closed" for bug tracking, or "!discussion" to highlight the task, and
-someone can visibly be assigned to a task with @joe.
+- the tag list at the end of a task being edited now also shows tags from other lists. There is a setting
+to change this but it helps keep things tidy. The grayed tags are "borrowed" from the other lists.
 
-- the tag list at the end of a task being edited now also shows tags *from other lists*. There is a setting
-to change this, but it helps keep things tidy. The grayed tags are "borrowed" from the other lists.
+- I added a backup system in case you are using sqlite (which I always receommend unless you really
+have a reason to use mysql). Backuped files are kept according to the main settings, and restoration
+must be done manually if ever something terrible happens
 
-- Finally, I added a backup system in case you are using sqlite (which I highly recommend here unless you
-really have a reason to use mysql). The duration of backup files is set in the settings, but their restoration
-must be done manually if ever something terrible happens (easy, it is one single file to rename).

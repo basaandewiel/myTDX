@@ -39,6 +39,8 @@ function stop_gpc(&$arr)
 {
 	if (!is_array($arr)) return 1;
 	
+//210131 baswi: commented out next line, because this gave an error after updating RPI
+// google says that this function does nothing
 	//if (!get_magic_quotes_gpc()) return 1;
 	reset($arr);
 	foreach($arr as $k=>$v)
@@ -84,7 +86,6 @@ class Config
 		'lang' => array('default'=>'en', 'type'=>'s'),
 		'password' => array('default'=>'', 'type'=>'s'),
 		'smartsyntax' => array('default'=>1, 'type'=>'i'),
-		'markdown' => array('default'=>1, 'type'=>'i'),
 		'timezone' => array('default'=>'UTC', 'type'=>'s'),
 		'autotag' => array('default'=>1, 'type'=>'i'),
 		'duedateformat' => array('default'=>1, 'type'=>'i'),
@@ -97,8 +98,7 @@ class Config
 		'template' => array('default'=>'default', 'type'=>'s'),
 		'showdate' => array('default'=>0, 'type'=>'i'),
 		'alientags' => array('default'=>0, 'type'=>'i'),
-		'taskxrefs' => array('default'=>0, 'type'=>'i'),
-		'dbbackup' => array('default'=>30, 'type'=>'i', 'options'=>array(-1,0,1,7,30,365)),
+		'dbbackup' => array('default'=>30, 'type'=>'i', 'options'=>array(0,1,7,30,365)),
 	);
 
 	public static $config;

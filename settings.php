@@ -33,7 +33,6 @@ if(isset($_POST['save']))
 	if(isset($_POST['password']) && $_POST['password'] != '') Config::set('password', $_POST['password']);
 	elseif(!_post('allowpassword')) Config::set('password', '');
 	Config::set('smartsyntax', (int)_post('smartsyntax'));
-	Config::set('markdown', (int)_post('markdown'));
 	// Do not set invalid timezone
 	try {
 	    $tz = trim(_post('timezone'));
@@ -52,7 +51,6 @@ if(isset($_POST['save']))
 	Config::set('title', trim(_post('title')));
 	Config::set('showdate', (int)_post('showdate'));
 	Config::set('alientags', (int)_post('alientags'));
-	Config::set('taskxrefs', (int)_post('taskxrefs'));
 	Config::set('dbbackup', (int)_post('dbbackup'));
 	Config::save();
 	$t['saved'] = 1;
@@ -183,13 +181,6 @@ header('Content-type:text/html; charset=utf-8');
 </td></tr>
 
 <tr>
-<th><?php _e('set_markdown');?>:<br/></th>
-<td>
- <label><input type="radio" name="markdown" value="1" <?php if(_c('markdown')) echo 'checked="checked"'; ?> /><?php _e('set_enabled');?></label> <br/>
- <label><input type="radio" name="markdown" value="0" <?php if(!_c('markdown')) echo 'checked="checked"'; ?> /><?php _e('set_disabled');?></label>
-</td></tr>
-
-<tr>
 <th><?php _e('set_autotag');?>:<br/><span class="descr"><?php _e('set_autotag_descr');?></span></th>
 <td>
  <label><input type="radio" name="autotag" value="1" <?php if(_c('autotag')) echo 'checked="checked"'; ?> /><?php _e('set_enabled');?></label> <br/>
@@ -269,14 +260,6 @@ header('Content-type:text/html; charset=utf-8');
 </tr>
 
 <tr>
-<th><?php _e('set_taskxrefs');?>:</th>
-<td>
- <label><input type="radio" name="taskxrefs" value="1" <?php if(_c('taskxrefs')) echo 'checked="checked"'; ?> /><?php _e('set_enabled');?></label> <br/>
- <label><input type="radio" name="taskxrefs" value="0" <?php if(!_c('taskxrefs')) echo 'checked="checked"'; ?> /><?php _e('set_disabled');?></label>
-</td>
-</tr>
-
-<tr>
 <th><?php _e('set_dbbackup');?>:<br/><span class="descr"><?php _e('set_dbbackup_descr');?></span></th>
 <td>
  <select name="dbbackup"><?php echo selectOptions(array(
@@ -284,8 +267,7 @@ header('Content-type:text/html; charset=utf-8');
 		1=>__('set_24hour'),
 		7=>__('set_7day'),
 	 	30=>__('set_1month'),
-	 	365=>__('set_1year'),
-		-1=>__('set_nobackup')),
+	 	365=>__('set_1year')),
 		 _c('dbbackup')); ?></select>
 </td></tr>
 

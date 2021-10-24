@@ -174,7 +174,6 @@ li.task-expanded .task-toggle { background-position:-80px -16px; }
 .show-inline-date .task-date { display:inline; }
 .show-inline-date li.task-completed .task-date-completed { display:inline; }
 .show-inline-date li.task-completed .task-date { display:none; }
-.hide-task-xref .task-through .task-xref { display:none; }
 .task-through { overflow:hidden; }
 .task-through-right { float:right; }
 .task-title a { color:#000000; }

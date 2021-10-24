@@ -6,6 +6,10 @@
 
 (function(){
 
+// 190824 baswi - next line added, so I can check that on mobile list 'everywhere' is default displayed
+var isMobile = (navigator.platform == 'Linux aarch64')
+
+
 var taskList = new Array(), taskOrder = new Array();
 var filter = { compl:0, search:'', due:'' };
 var sortOrder; //save task order before dragging
@@ -21,7 +25,7 @@ var tabLists = {
 	_alltasks: {},
 	clear: function(){
 		this._lists = {}; this._length = 0; this._order = [];
-		this._alltasks = { id:-1, showCompl:0, sort:3 }; 
+		this._alltasks = { id:-1, showCompl:0, sort:2 }; 
 	},
 	length: function(){ return this._length; },
 	exists: function(id){ if(this._lists[id] || id==-1) return true; else return false; },
@@ -47,7 +51,8 @@ var mytinytodo = window.mytinytodo = _mtt = {
 	mttUrl: '',
 	templateUrl: '',
 	options: {
-		openList: 0,
+// 190824  baswi - if isMobile then  load first list, otherwise load all-tasks
+		openList: isMobile ? 0 : -1,
 		singletab: false,
 		autotag: false,
 		tagPreview: true,
@@ -92,6 +97,7 @@ var mytinytodo = window.mytinytodo = _mtt = {
 	// procs
 	init: function(options)
 	{
+                console.log('***baswi*** in function init');
 		jQuery.extend(this.options, options);
 
 		flag.needAuth = options.needAuth ? true : false;
@@ -99,7 +105,6 @@ var mytinytodo = window.mytinytodo = _mtt = {
 
 		if(this.options.showdate) $('#page_tasks').addClass('show-inline-date');
 		if(this.options.singletab) $('#lists .mtt-tabs').addClass('mtt-tabs-only-one');
-		if(!this.options.taskxrefs) $('#page_tasks').addClass('hide-task-xref');
 
 		this.parseAnchor();
 
@@ -120,11 +125,13 @@ var mytinytodo = window.mytinytodo = _mtt = {
 
 
 		$('#newtask_form').submit(function(){
+                        console.log('***baswi*** in handler newtask_form.submit');
 			submitNewTask(this);
 			return false;
 		});
 		
 		$('#newtask_submit').click(function(){
+                        console.log('***baswi*** in handler newtask_submit');
 			$('#newtask_form').submit();
 		});
 
@@ -157,6 +164,8 @@ var mytinytodo = window.mytinytodo = _mtt = {
 		});
 
 		$('#search').keyup(function(event){
+                        console.log('***baswi*** in search.keyup');
+
 			if(event.keyCode == 27) return;
 			if($(this).val() == '') $('#search_close').hide();	//actual value is only on keyup
 			else $('#search_close').show();
@@ -164,6 +173,7 @@ var mytinytodo = window.mytinytodo = _mtt = {
 			searchTimer = setTimeout(function(){searchTasks()}, 400);
 		})
 		.keydown(function(event){
+                        console.log('***baswi*** in function .keydown');
 			if(event.keyCode == 27) { // cancel on Esc (NB: no esc event on keypress in Chrome and on keyup in Opera)
 				if($(this).val() != '') {
 					$(this).val('');
@@ -193,9 +203,11 @@ var mytinytodo = window.mytinytodo = _mtt = {
 		});
 
 		$('#tagcloudbtn').click(function(){
+                        console.log('***baswi*** in handler tagcloudbtn click');
 			if(!_mtt.menus.tagcloud) _mtt.menus.tagcloud = new mttMenu('tagcloud', {
 				beforeShow: function(){
 					if(flag.tagsChanged) {
+                                                console.log('***baswi*** in function tagcloudbtn click ');
 						$('#tagcloudcontent').html('');
 						$('#tagcloudload').show();
 						loadTags(curList.id, function(){$('#tagcloudload').hide();});
@@ -216,6 +228,7 @@ var mytinytodo = window.mytinytodo = _mtt = {
 		});
 
 		$('#mtt-notes-show').click(function(){
+                        console.log('***baswi*** in handler mtt-notes-show');
 			toggleAllNotes(1);
 			this.blur();
 			return false;
@@ -300,6 +313,7 @@ var mytinytodo = window.mytinytodo = _mtt = {
 		});
 
 		$('#taskedit_form').submit(function(){
+                        console.log('***baswi*** in handler taskedit_form.submit');
 			return saveTask(this);
 		});
 
@@ -318,7 +332,18 @@ var mytinytodo = window.mytinytodo = _mtt = {
 			dayNamesMin:_mtt.lang.daysMin, dayNames:_mtt.lang.daysLong, monthNamesShort:_mtt.lang.monthsLong
 		});
 
-		$("#edittags").autocomplete('ajax.php?suggestTags', {scroll: false, multiple: true, selectFirst:false, max:8, extraParams:{list:function(){ var taskId = document.getElementById('taskedit_form').id.value; return taskList[taskId].listId; }}});
+		//$("#edittags").autocomplete('ajax.php?suggestTags', {scroll: false, multiple: true, selectFirst:false, max:8, extraParams:{list:function(){ var taskId = document.getElementById('taskedit_form').id.value; return taskList[taskId].listId; }}});
+
+		$("#edittags").autocomplete('ajax.php?suggestTags', {scroll: false, multiple: true, selectFirst:false, max:8, extraParams:{list:function(){
+			var taskId = document.getElementById('taskedit_form').id.value;
+			//baswi: for new tasks, the taskId is not defefined, so return -1 in that case; this is returned to ajax.php?suggestTags
+			//check was necessary because otherwise tasklist[taskId].listId is not defined
+			//it seems that the return statement is not necessary at all, because the condition is removed in ajax.php
+			//if (taskId)
+			//	return taskList[taskId].listId;
+			//else
+			//	return -1;			
+		}}});
 
 		$('#taskedit_form').find('select,input,textarea').bind('change keypress', function(){
 			flag.editFormChanged = true;
@@ -369,6 +394,7 @@ var mytinytodo = window.mytinytodo = _mtt = {
 
 		$('#tasklist .tag').live('click', function(event){
 			clearTimeout(_mtt.timers.previewtag);
+                        console.log('***baswi*** in tasklist .tag.live click');
 			$('#tasklist li').removeClass('not-in-tagpreview');
 			addFilterTag($(this).attr('tag'), $(this).attr('tagid'), (event.metaKey || event.ctrlKey ? true : false) );
 			return false;
@@ -799,6 +825,8 @@ function publishCurList()
 
 function loadTasks(opts)
 {
+        console.log('***baswi*** in function loadTasks');
+
 	if(!curList) return false;
 	setSort(curList.sort, 1);
 	opts = opts || {};
@@ -840,9 +868,6 @@ function prepareTaskStr(item, noteExp)
 	// &mdash; = &#8212; = —
 	var id = item.id;
 	var prio = item.prio;
-
-	var notes = prepareHtml(item.note.replace(/<br[^>]*>/ig,''), true);
-
 	return '<li id="taskrow_'+id+'" class="' + (item.compl?'task-completed ':'') + item.dueClass + (item.note!=''?' task-has-note':'') +
 				((curList.showNotes && item.note != '') || noteExp ? ' task-expanded' : '') + prepareTagsClass(item.tags_ids) + '">' +
 		'<div class="task-actions"><a href="#" class="taskactionbtn"></a></div>'+"\n"+
@@ -857,7 +882,7 @@ function prepareTaskStr(item, noteExp)
 		(curList.id == -1 ? '<span class="task-listname">'+ tabLists.get(item.listId).name +'</span>' : '') +	"\n" +
 		prepareTagsStr(item)+'<span class="task-date">'+item.dateInlineTitle+'</span></div>'+
 		'<div class="task-note-block">'+
-			'<div id="tasknote'+id+'" class="task-note"><div class="plain">'+notes+'</div></div>'+
+			'<div id="tasknote'+id+'" class="task-note"><span>'+prepareHtml(item.note)+'</span></div>'+
 			'<div id="tasknotearea'+id+'" class="task-note-area"><textarea id="notetext'+id+'"></textarea>'+
 				'<span class="task-note-actions"><a href="#" class="mtt-action-note-save">'+_mtt.lang.get('actionNoteSave')+
 				'</a> | <a href="#" class="mtt-action-note-cancel">'+_mtt.lang.get('actionNoteCancel')+'</a></span></div>'+
@@ -866,22 +891,14 @@ function prepareTaskStr(item, noteExp)
 };
 
 
-function prepareHtml(s, enableMarkdown=false)
+function prepareHtml(s)
 {
-	if(enableMarkdown && _mtt.options.markdown) {
-		s = markdown(s);
-		// Still rewrite those links that were not written with the official painful and braindamaged markdown syntax
-		s = s.replace(/(^|\s|>)((?:http|https|ftp):\/\/([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/ig, '$1<a href="$2" target="_blank">$2</a>$4');
-	}
-	else {
-		// make URLs clickable
-		s = s.replace(/\n/g,'<br />');
-		s = s.replace(/(^|\s|>)(www\.([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/gi, '$1<a href="http://$2" target="_blank">$2</a>$4');
-		s = s.replace(/(^|\s|>)((?:http|https|ftp):\/\/([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/ig, '$1<a href="$2" target="_blank">$2</a>$4');
-	}
-	// We alsway make #nnn xrefs clickable as well
+	// make xref clickable
 	s = s.replace(/#([0-9]+)/g, '<a class="task-xref" tid=$1 href="#">#$1</a>');
-	return s;
+
+	// make URLs clickable
+	s = s.replace(/(^|\s|>)(www\.([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/gi, '$1<a href="http://$2" target="_blank">$2</a>$4');
+	return s.replace(/(^|\s|>)((?:http|https|ftp):\/\/([\w\#$%&~\/.\-\+;:=,\?\[\]@]+?))(,|\.|:|)?(?=\s|&quot;|&lt;|&gt;|\"|<|>|$)/ig, '$1<a href="$2" target="_blank">$2</a>$4');
 };
 
 function preparePrio(prio,id)
@@ -952,6 +969,8 @@ function prepareDuedate(item)
 
 function submitNewTask(form)
 {
+        console.log('***baswi*** in functino submitNewTask');
+
 	if(form.task.value == '') return false;
 	_mtt.db.request('newTask', { list:curList.id, title: form.task.value, tag:_mtt.filter.getTags() }, function(json){
 		if(!json.total) return;
@@ -1285,6 +1304,8 @@ function deleteTask(id)
 
 function completeTask(id, ch)
 {
+        console.log('***baswi*** in function completeTask');
+
 	if(!taskList[id]) return; //click on already removed from the list while anim. effect
 	var compl = 0;
 	if(ch.checked) compl = 1;
@@ -1479,6 +1500,7 @@ function fillEditAllTags() // show tags below a task
 
 function addEditTag(tag)
 {
+        console.log('***baswi*** in function addEditTag');
 	var v = $('#edittags').val();
 	if(v == '') { 
 		$('#edittags').val(tag);
