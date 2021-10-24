@@ -82,7 +82,6 @@ elseif(isset($_GET['loadTasks']))
 		//baswi: executed when all lists are selected
 		$userLists = getUserListsSimple();
 		//baswi: next line gives error on second param that should be an array
-		//baswi: I commented this line, because no filtering on specific list has to be done
 		$sqlWhere .= " AND {$db->prefix}todolist.list_id IN (". implode(',', array_keys($userLists)). ") ";
 	}
 	else $sqlWhere .= " AND {$db->prefix}todolist.list_id=". $listId;
