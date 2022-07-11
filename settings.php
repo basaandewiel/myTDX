@@ -17,7 +17,6 @@ if($needAuth && !is_logged())
 
 if(isset($_POST['save']))
 {
-	stop_gpc($_POST);
 	$t = array();
 	$langs = getLangs();
 	Config::$params['lang']['options'] = array_keys($langs);

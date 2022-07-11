@@ -73,7 +73,6 @@ if(isset($_GET['loadLists']))
 }
 elseif(isset($_GET['loadTasks']))
 {
-	stop_gpc($_GET);
 	$listId = (int)_get('list');
 	check_read_access($listId);
 
@@ -161,7 +160,6 @@ elseif(isset($_GET['loadTasks']))
 }
 elseif(isset($_GET['newTask']))
 {
-	stop_gpc($_POST);
 	$listId = (int)_post('list');
 	check_write_access($listId);
 	$t = array();
@@ -204,7 +202,6 @@ elseif(isset($_GET['newTask']))
 }
 elseif(isset($_GET['fullNewTask']))
 {
-	stop_gpc($_POST);
 	$listId = (int)_post('list');
 	check_write_access($listId);
 	$title = trim(_post('title'));
@@ -269,7 +266,6 @@ elseif(isset($_GET['editNote']))
 {
 	check_write_access();
 	$id = (int)_post('id');
-	stop_gpc($_POST);
 	$note = str_replace("\r\n", "\n", trim(_post('note')));
 	$db->dq("UPDATE {$db->prefix}todolist SET note=?,d_edited=? WHERE id=$id", array($note, time()) );
 	$t = array();
@@ -281,7 +277,6 @@ elseif(isset($_GET['editTask']))
 {
 	check_write_access();
 	$id = (int)_post('id');
-	stop_gpc($_POST);
 	$title = trim(_post('title'));
 	$note = str_replace("\r\n", "\n", trim(_post('note')));
 	$prio = (int)_post('prio');
@@ -316,7 +311,6 @@ elseif(isset($_GET['editTask']))
 elseif(isset($_GET['changeOrder']))
 {
 	check_write_access();
-	stop_gpc($_POST);
 	$s = _post('order');
 	parse_str($s, $order);
 	$t = array();
@@ -345,7 +339,6 @@ elseif(isset($_POST['login']))
 		$t['disabled'] = 1;
 		jsonExit($t);
 	}
-	stop_gpc($_POST);
 	$password = _post('password');
 	if($password == Config::get('password')) {
 		$t['logged'] = 1;
@@ -435,7 +428,6 @@ elseif(isset($_GET['tagCloud']))
 elseif(isset($_GET['addList']))
 {
 	check_write_access();
-	stop_gpc($_POST);
 	$t = array();
 	$t['total'] = 0;
 	$name = str_replace(array('"',"'",'<','>','&'),array('','','','',''),trim(_post('name')));
@@ -451,7 +443,6 @@ elseif(isset($_GET['addList']))
 elseif(isset($_GET['renameList']))
 {
 	check_write_access();
-	stop_gpc($_POST);
 	$t = array();
 	$t['total'] = 0;
 	$id = (int)_post('list');
@@ -465,7 +456,6 @@ elseif(isset($_GET['renameList']))
 elseif(isset($_GET['deleteList']))
 {
 	check_write_access();
-	stop_gpc($_POST);
 	$t = array();
 	$t['total'] = 0;
 	$id = (int)_post('list');
@@ -513,7 +503,6 @@ elseif(isset($_GET['moveTask']))
 elseif(isset($_GET['changeListOrder']))
 {
 	check_write_access();
-	stop_gpc($_POST);
 	$order = (array)_post('order');
 	$t = array();
 	$t['total'] = 0;
@@ -536,7 +525,6 @@ elseif(isset($_GET['changeListOrder']))
 elseif(isset($_GET['parseTaskStr']))
 {
 	check_write_access();
-	stop_gpc($_POST);
 	$t = array(
 		'title' => trim(_post('title')),
 		'prio' => 0,
@@ -553,7 +541,6 @@ elseif(isset($_GET['parseTaskStr']))
 elseif(isset($_GET['clearCompletedInList']))
 {
 	check_write_access();
-	stop_gpc($_POST);
 	$t = array();
 	$t['total'] = 0;
 	$listId = (int)_post('list');
