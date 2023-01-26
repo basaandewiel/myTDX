@@ -340,7 +340,7 @@ elseif(isset($_POST['login']))
 		jsonExit($t);
 	}
 	$password = _post('password');
-	if($password == Config::get('password')) {
+	if(in_array($password,explode(' ',Config::get('password')))) {
 		$t['logged'] = 1;
 		session_regenerate_id(1);
 		$_SESSION['logged'] = 1;

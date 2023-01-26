@@ -117,7 +117,7 @@ class Lang extends DefaultLang
 		'set_enabled' => "Enabled",
 		'set_disabled' => "Disabled",
 		'set_newpass' => "New password",
-		'set_newpass_descr' => "(leave blank to keep current password)",
+		'set_newpass_descr' => "(leave blank to keep current password, separate multiple passwords with blanks)",
 		'set_smartsyntax' => "Smart syntax",
 		'set_smartsyntax_descr' => "(/priority/ task /tags/)",
 		'set_markdown' => "Use markdown in notes",
