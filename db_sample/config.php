@@ -10,8 +10,10 @@ $config['url'] = '';
 $config['mtt_url'] = '';
 $config['title'] = 'Sample TDX';
 $config['lang'] = 'en';
+# password can be an array of blank-separated passwords if you need more than one
 $config['password'] = '';
 $config['smartsyntax'] = 1;
+$config['markdown'] = 0;
 $config['timezone'] = 'Europe/Paris';
 $config['autotag'] = 1;
 $config['duedateformat'] = 1;
