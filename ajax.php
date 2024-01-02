@@ -79,7 +79,6 @@ elseif(isset($_GET['loadTasks']))
 	$sqlWhere = $inner = '';
 	if($listId == -1) {
 		$userLists = getUserListsSimple();
-		#$sqlWhere .= " AND {$db->prefix}todolist.list_id IN (". implode(array_keys($userLists), ','). ") ";
 		$sqlWhere .= " AND {$db->prefix}todolist.list_id IN (". implode(',', array_keys($userLists)). ") ";
 	}
 	else $sqlWhere .= " AND {$db->prefix}todolist.list_id=". $listId;
