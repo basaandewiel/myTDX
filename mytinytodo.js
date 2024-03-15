@@ -21,7 +21,7 @@ var tabLists = {
 	_alltasks: {},
 	clear: function(){
 		this._lists = {}; this._length = 0; this._order = [];
-		this._alltasks = { id:-1, showCompl:0, sort:3 }; 
+		this._alltasks = { id:-1, showCompl:0, sort:2 }; 
 	},
 	length: function(){ return this._length; },
 	exists: function(id){ if(this._lists[id] || id==-1) return true; else return false; },
