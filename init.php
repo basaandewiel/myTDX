@@ -51,6 +51,10 @@ require_once(MTTPATH. 'lang/'.Config::get('lang').'.php');
 $_mttinfo = array();
 
 $needAuth = (Config::get('password') != '') ? 1 : 0;
+# baswi added next line, because after configuring password I could not get in
+# $needAuth = 0;
+
+
 if($needAuth && !isset($dontStartSession))
 {
 	if(Config::get('session') == 'files')
