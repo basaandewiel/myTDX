@@ -2236,12 +2236,88 @@ function doAuth(form)
 			flag.isLogged = true;
 			window.location.reload();
 		}
+		else if(json.requires_2fa)
+		{
+			// 2FA is required, show 2FA code prompt
+			$('#authform').hide();
+			show2FAForm(form);
+		}
 		else {
 			flashError(_mtt.lang.get('invalidpass'));
 			$('#password').focus();
+			$('#authform').show();
 		}
 	}, 'json');
-	$('#authform').hide();
+}
+
+function show2FAForm(passwordForm)
+{
+    // Create 2FA form if it doesn't exist
+    if($('#2fa_form').length === 0) {
+        var formHtml = '<div id="2fa_form" style="padding:10px; background:#fff; border:1px solid #ccc; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999;">' +
+            '<h3>Two-Factor Authentication</h3>' +
+            '<p>Enter the 6-digit code from your authenticator app:</p>' +
+            '<input type="text" id="2fa_code" maxlength="6" style="font-size:24px; text-align:center; padding:5px; width:150px;" autofocus />' +
+            '<br><br>' +
+            '<button id="btn_2fa_verify">Verify</button>' +
+            '<button id="btn_2fa_cancel">Cancel</button>' +
+            '<div id="2fa_error" style="color:red; margin-top:10px;"></div>' +
+            '</div>';
+        $('body').append(formHtml);
+    }
+
+    $('#2fa_form').show();
+    $('#2fa_code').val('').focus();
+    $('#2fa_error').text('');
+
+    // Attach event handlers using jQuery (not inline onclick)
+    $('#btn_2fa_verify').click(doVerify2FA);
+    $('#btn_2fa_cancel').click(cancel2FA);
+
+    // Make Verify button activate on Enter key
+    $('#2fa_code').keypress(function(e) {
+        if(e.which === 13) { // Enter key
+            doVerify2FA();
+            return false; // Prevent form submission if inside a form
+        }
+    });
+
+    // Store reference to original password form
+    window._pendingAuthForm = passwordForm;
+}
+
+function doVerify2FA()
+{
+	var code = $('#2fa_code').val();
+	if(!code || code.length !== 6) {
+		$('#2fa_error').text('Please enter a valid 6-digit code');
+		return;
+	}
+	
+	$.post(mytinytodo.mttUrl+'ajax.php?verify_2fa', { verify_2fa:1, code: code }, function(json){
+		if(json.verified && json.logged)
+		{
+			flag.isLogged = true;
+			$('#2fa_form').hide();
+			window.location.reload();
+		}
+		else {
+			$('#2fa_error').text('Invalid 2FA code. Please try again.');
+			$('#2fa_code').val('').focus();
+		}
+	}, 'json');
+}
+
+function cancel2FA()
+{
+	$('#2fa_form').hide();
+	if(window._pendingAuthForm) {
+		$(window._pendingAuthForm).find('input[type=password]').val('').focus();
+		$(window._pendingAuthForm).show();
+		window._pendingAuthForm = null;
+	}
+	// Also log out the pending session
+	$.post(mytinytodo.mttUrl+'ajax.php?logout', { logout:1 }, function(json){}, 'json');
 }
 
 function logout()
