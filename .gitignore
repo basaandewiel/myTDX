@@ -1,0 +1,14 @@
+*.bak
+.htaccess
+.htusers
+.idea
+!db/.htaccess
+db/config.php
+db/config.json
+db/*.db
+db/*.db.*
+tmp/*
+tmp/login/
+scripts
+__pycache__/
+*.pyc

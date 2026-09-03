@@ -1,0 +1,53 @@
+/* CSS for tag kinds @username or #status */
+
+.task-tags {
+	float: right;
+}
+
+.task-tags IMG {
+    height: 12px;
+    padding-right:4px;
+    vertical-align: bottom;
+    padding-bottom: 2px;
+}
+
+.task-tags .tag_user {
+	border: 1px solid gray;
+	padding-left: 4px;
+	padding-right: 4px;
+	background-color: #44FF88;
+	border-radius: 3px;
+    text-decoration: none;
+}
+
+.task-tags .tag_time {
+	border: 1px solid red;
+	background-color: yellow;
+	color: black;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-radius: 3px;
+    text-decoration: none;
+}
+
+.task-tags .tag_fixme {
+	border: 1px solid red;
+	background-color: #FFAAAA;
+	color: black;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-radius: 3px;
+    text-decoration: none;
+}
+
+.task-tags .tag_highlight {
+	width: 1em;
+	height: 100%;
+	border: 1px solid gray;
+	border-radius: 1em;
+    padding: 0px 4px 0px 4px;
+    text-decoration: none;
+    background-color: #DDDDFF;
+}
+
+/* Specific CSS for specific tags: use "tag_yourname" */
