@@ -393,19 +393,6 @@
             var t = json.list[0];
             var wasInView = !state.showCompl;
             state.tasks[id] = t;
-
-            if (compl && !state.showCompl) {
-                // remove from list
-                delete state.tasks[id];
-                var idx = state.order.indexOf(id);
-                if (idx >= 0) state.order.splice(idx, 1);
-                if (t.dueClass === 'past') state.taskCnt.past = Math.max(0, state.taskCnt.past - 1);
-                if (t.dueClass === 'today') state.taskCnt.today = Math.max(0, state.taskCnt.today - 1);
-                if (t.dueClass === 'soon') state.taskCnt.soon = Math.max(0, state.taskCnt.soon - 1);
-                state.taskCnt.total = Math.max(0, state.taskCnt.total - 1);
-            } else {
-                state.tasks[id] = t;
-            }
             renderTasks();
             updateCounts();
         }).catch(function () {});
@@ -968,7 +955,7 @@
         } else {
             state.flag.readOnly = false;
             readOnly = false;
-            if (ownerEls) ownerEls.forEach(function (e) { e.style.display = isLogged ? '' : 'none'; });
+            if (ownerEls) ownerEls.forEach(function (e) { e.style.display = ''; });
             if (barAuth) barAuth.style.display = isLogged ? 'none' : '';
             if (barLogin) barLogin.style.display = isLogged ? 'none' : '';
         }
