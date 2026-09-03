@@ -24,6 +24,7 @@ window.MTTX = {
 <script type="text/javascript" src="<?php echo MyTDX\e($baseUrl); ?>js/api.js?v=27"></script>
 <script type="text/javascript" src="<?php echo MyTDX\e($baseUrl); ?>js/ui.js?v=27"></script>
 <script type="text/javascript" src="<?php echo MyTDX\e($baseUrl); ?>js/datepicker.js?v=27"></script>
+<script type="text/javascript" src="<?php echo MyTDX\e($baseUrl); ?>js/qrcode.js?v=27"></script>
 <script type="text/javascript" src="<?php echo MyTDX\e($baseUrl); ?>js/app.js?v=27"></script>
 
 <div id="wrapper">

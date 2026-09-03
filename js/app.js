@@ -33,6 +33,18 @@
         return M.escapeHtml(s);
     }
 
+    function renderTotpQr(container, uri) {
+        if (!container) return '';
+        try {
+            var qr = qrcode(0, 'M');
+            qr.addData(uri);
+            qr.make();
+            container.innerHTML = qr.createImgTag(4, 12, 'TOTP QR');
+        } catch (e) {
+            container.innerHTML = '<a href="' + esc(uri) + '" target="_blank">Scan QR / OTP URI</a>';
+        }
+    }
+
     function prepareTaskHtml(item, noteExpanded) {
         var cls = [];
         if (item.compl) cls.push('task-completed');
@@ -1126,8 +1138,8 @@
                 api.generate2faSecret().then(function (j) {
                     if (j.secret) {
                         M.$('#totp_secret_display').value = j.secret;
-                        // Show QR in a pragmatic way: link to external QR api
-                        M.$('#totp_qr').innerHTML = '<a href="' + esc(j.uri) + '" target="_blank">Scan QR / OTP URI</a>';
+                        M.$('#totp_qr').innerHTML = '';
+                        renderTotpQr(M.$('#totp_qr'), j.uri);
                     }
                 }).catch(function () {});
             }
@@ -1137,7 +1149,8 @@
             api.generate2faSecret().then(function (j) {
                 if (j.secret) {
                     M.$('#totp_secret_display').value = j.secret;
-                    M.$('#totp_qr').innerHTML = '<a href="' + esc(j.uri) + '" target="_blank">Scan QR / OTP URI</a>';
+                    M.$('#totp_qr').innerHTML = '';
+                    renderTotpQr(M.$('#totp_qr'), j.uri);
                 }
             }).catch(function () {});
         });
