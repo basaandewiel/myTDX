@@ -1,22 +1,61 @@
 **myTDX** (my tiny todo extended)
 
-** Use following nginx config file **
+This is a total rewrite of the myTDX webapp.
+The original myTDX webapp is developed long ago, and contains several critical vulnerabilities when reachable from the internet.
+This is the reason that I did this total rewrite (with aid of OpenCode and Qwen LLM).
+
+** Use following server definition in the nginx config file **
 ```
-server {
-        listen 4001 default_server;
+    server {
+        listen       80;
+        server_name  localhost;
 
-        root /srv/http/myTDX;
-        server_name _;
-        autoindex off;
+        # Move root and index HERE so all location blocks inherit them
+        root   /srv/http/myTDX;
+        index  index.php index.html index.htm;
 
-        proxy_intercept_errors on;
-        index myTDX/index.php index.php index.html index.htm;
+        location / {
+            try_files $uri $uri/ =404;
+        }
 
-# deny access to hidden files and for instance Git directories
-	location ~ /\.(?!well-known).* {
-	    deny all;
-	        access_log off;
-		    log_not_found off;
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   /usr/share/nginx/html;
+        }
+
+
+        # ---- Security denylist ----
+        # Block hidden/dotfiles (.git, .htaccess, .env, etc.)
+        location ~ /\.(?!well-known).* {
+            deny all;
+            access_log off;
+            log_not_found off;
+        }
+
+        # Block database files
+        location ~ \.db$ {
+            deny all;
+        }
+
+        # Block JSON/INI/log/backup config & data files
+        location ~ \.(json|ini|log|lock|bak)$ {
+            deny all;
+        }
+
+        # Block the db and tmp directories outright
+        location ^~ /db/ { deny all; }
+        location ^~ /tmp/ { deny all; }
+
+
+
+	# Pass PHP scripts to FastCGI server
+        location ~ \.php$ {
+            include        fastcgi.conf;
+            fastcgi_intercept_errors on;
+            fastcgi_pass   unix:/run/php-fpm/php-fpm.sock;
+            fastcgi_param  SERVER_NAME $host;
+        }
+    }
 }
 
 
