@@ -108,6 +108,7 @@ function markdownToHtml(string $s): string
     $i = 0;
     $n = count($lines);
     $listType = null;
+    $listDepth = 0;
 
     $escapeLines = array_map($esc, $lines);
 
@@ -116,6 +117,10 @@ function markdownToHtml(string $s): string
 
         if (trim($line) === '') {
             if ($listType !== null) {
+                while ($listDepth > 0) {
+                    $out[] = '</' . $listType . '>';
+                    $listDepth--;
+                }
                 $out[] = '</' . $listType . '>';
                 $listType = null;
             }
@@ -126,6 +131,10 @@ function markdownToHtml(string $s): string
         // Code block placeholder
         if (preg_match('/^\{###CODE(\d+)###\}$/', trim($line), $m)) {
             if ($listType !== null) {
+                while ($listDepth > 0) {
+                    $out[] = '</' . $listType . '>';
+                    $listDepth--;
+                }
                 $out[] = '</' . $listType . '>';
                 $listType = null;
             }
@@ -136,6 +145,10 @@ function markdownToHtml(string $s): string
 
         if (preg_match('/^(#{1,6})\s+(.*)$/', $line, $m)) {
             if ($listType !== null) {
+                while ($listDepth > 0) {
+                    $out[] = '</' . $listType . '>';
+                    $listDepth--;
+                }
                 $out[] = '</' . $listType . '>';
                 $listType = null;
             }
@@ -147,6 +160,10 @@ function markdownToHtml(string $s): string
 
         if (preg_match('/^\s*([-*_])\s*(\1\s*){2,}$/', $line)) {
             if ($listType !== null) {
+                while ($listDepth > 0) {
+                    $out[] = '</' . $listType . '>';
+                    $listDepth--;
+                }
                 $out[] = '</' . $listType . '>';
                 $listType = null;
             }
@@ -157,6 +174,10 @@ function markdownToHtml(string $s): string
 
         if (preg_match('/^&gt;\s?(.*)$/', $line, $m)) {
             if ($listType !== null) {
+                while ($listDepth > 0) {
+                    $out[] = '</' . $listType . '>';
+                    $listDepth--;
+                }
                 $out[] = '</' . $listType . '>';
                 $listType = null;
             }
@@ -169,33 +190,73 @@ function markdownToHtml(string $s): string
             continue;
         }
 
-        if (preg_match('/^\s*[-*+]\s+(.*)$/', $line, $m)) {
+        if (preg_match('/^(\s*)[-*+]\s+(.*)$/', $line, $m)) {
+            $indent = strlen($m[1]);
+            $depth = intdiv($indent, 2);
+
             if ($listType !== 'ul') {
                 if ($listType !== null) {
+                    while ($listDepth > 0) {
+                        $out[] = '</' . $listType . '>';
+                        $listDepth--;
+                    }
                     $out[] = '</' . $listType . '>';
                 }
                 $listType = 'ul';
+                $listDepth = 0;
                 $out[] = '<ul>';
             }
-            $out[] = '<li>' . $inline($m[1]) . '</li>';
+
+            while ($listDepth < $depth) {
+                $out[] = '<ul>';
+                $listDepth++;
+            }
+            while ($listDepth > $depth) {
+                $out[] = '</ul>';
+                $listDepth--;
+            }
+
+            $out[] = '<li>' . $inline($m[2]) . '</li>';
             $i++;
             continue;
         }
 
-        if (preg_match('/^\s*\d+[.)]\s+(.*)$/', $line, $m)) {
+        if (preg_match('/^(\s*)\d+[.)]\s+(.*)$/', $line, $m)) {
+            $indent = strlen($m[1]);
+            $depth = intdiv($indent, 2);
+
             if ($listType !== 'ol') {
                 if ($listType !== null) {
+                    while ($listDepth > 0) {
+                        $out[] = '</' . $listType . '>';
+                        $listDepth--;
+                    }
                     $out[] = '</' . $listType . '>';
                 }
                 $listType = 'ol';
+                $listDepth = 0;
                 $out[] = '<ol>';
             }
-            $out[] = '<li>' . $inline($m[1]) . '</li>';
+
+            while ($listDepth < $depth) {
+                $out[] = '<ol>';
+                $listDepth++;
+            }
+            while ($listDepth > $depth) {
+                $out[] = '</ol>';
+                $listDepth--;
+            }
+
+            $out[] = '<li>' . $inline($m[2]) . '</li>';
             $i++;
             continue;
         }
 
         if ($listType !== null) {
+            while ($listDepth > 0) {
+                $out[] = '</' . $listType . '>';
+                $listDepth--;
+            }
             $out[] = '</' . $listType . '>';
             $listType = null;
         }
@@ -209,6 +270,10 @@ function markdownToHtml(string $s): string
     }
 
     if ($listType !== null) {
+        while ($listDepth > 0) {
+            $out[] = '</' . $listType . '>';
+            $listDepth--;
+        }
         $out[] = '</' . $listType . '>';
     }
 
