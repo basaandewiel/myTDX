@@ -71,7 +71,7 @@ function markdownToHtml(string $s): string
     }, $s);
 
     // Indented code blocks (4 spaces or tab), must be followed by blank line
-    $s = preg_replace_callback('/(?:^|\n)((?:[ \t]{4,}[^\n]*\n?)+)(?=\n|$)/', function ($m) use (&$codeBlocks, $placeholder) {
+    $s = preg_replace_callback('/(?:^|\n)((?:(?![ \t]*+(?:[-*+]\s|\d+[.)]\s))[ \t]{4,}[^\n]*\n?)+)(?=\n|$)/', function ($m) use (&$codeBlocks, $placeholder) {
         $text = rtrim($m[1], "\n");
         $text = preg_replace('/^[ \t]{4,}/m', '', $text);
         $codeBlocks[] = '<pre><code>' . htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</code></pre>';
