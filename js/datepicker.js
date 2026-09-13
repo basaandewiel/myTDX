@@ -82,6 +82,7 @@
         prev.innerHTML = '&laquo;';
         prev.addEventListener('click', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             currentMonth--;
             if (currentMonth < 0) { currentMonth = 11; currentYear--; }
             render();
@@ -90,6 +91,7 @@
         next.innerHTML = '&raquo;';
         next.addEventListener('click', function (e) {
             e.preventDefault();
+            e.stopPropagation();
             currentMonth++;
             if (currentMonth > 11) { currentMonth = 0; currentYear++; }
             render();
